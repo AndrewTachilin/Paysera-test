@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  homework:
+    container_name: homework
+    restart: always
+    build: .
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www

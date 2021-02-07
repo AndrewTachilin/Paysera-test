@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Tests\DataFixtures\Models;
 
-use App\Chains\ChainOfCurrencyExchange\EuroStrategy;
-use App\Contracts\Strategies\BusinessStrategyInterface;
+use App\Chains\ChainOfCurrencyExchange\JpyStrategy;
 use App\Models\Actions\WalletOperation;
 use App\Contracts\Services\Wallet\WalletDepositCalculateManagerInterface as WalletDepositAction;
+use App\Strategies\WithdrawRules\PrivateStrategy;
 
-class WithdrawBusinessWalletOperationFixture
+class DepositPrivateJpyWalletOperationFixture
 {
     public static function get(): WalletOperation
     {
         return (new WalletOperation())
             ->setUserId(1)
             ->setDateOfAction('2020-10-20')
-            ->setCurrency(EuroStrategy::EURO)
-            ->setClientType(BusinessStrategyInterface::CLIENT_TYPE)
+            ->setCurrency(JpyStrategy::JPY)
+            ->setClientType(PrivateStrategy::CLIENT_TYPE)
             ->setActionType(WalletDepositAction::ACTION)
             ->setActionAmount(300);
     }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Chains\ChainOfWalletAction;
 
-use App\Exceptions\Wallet\WalletActionException;
 use App\Contracts\Services\Wallet\WalletWithdrawCalculateManagerInterface as WalletAction;
+use App\Exceptions\Wallet\WalletActionException;
 
 class WithdrawLink extends DepositLink
 {

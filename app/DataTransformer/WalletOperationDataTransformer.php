@@ -8,6 +8,7 @@ use App\Contracts\DataTransformer\WalletOperationDataTransformerInterface;
 use App\Exceptions\ValidationException\ValidationException;
 use App\Models\Actions\WalletOperation;
 use Carbon\Carbon;
+use Symfony\Component\HttpFoundation\Response;
 
 class WalletOperationDataTransformer implements WalletOperationDataTransformerInterface
 {
@@ -16,13 +17,13 @@ class WalletOperationDataTransformer implements WalletOperationDataTransformerIn
         try {
             $walletOperation = (new WalletOperation())
                 ->setDateOfAction(Carbon::createFromFormat('Y-m-d', $walletOperation[0])->format('Y-m-d'))
-                ->setUserId(intval($walletOperation[1]))
+                ->setUserId((int) $walletOperation[1])
                 ->setClientType($walletOperation[2])
                 ->setActionType($walletOperation[3])
-                ->setActionAmount(floatval($walletOperation[4]))
+                ->setActionAmount((int) $walletOperation[4])
                 ->setCurrency($walletOperation[5]);
         } catch (\Throwable $e) {
-            throw new ValidationException('Invalid data was passed', 400);
+            throw new ValidationException('Invalid data was passed', Response::HTTP_BAD_REQUEST);
         }
 
         return $walletOperation;
@@ -35,7 +36,7 @@ class WalletOperationDataTransformer implements WalletOperationDataTransformerIn
             ->setUserId($walletOperation->getUserId())
             ->setClientType($walletOperation->getClientType())
             ->setActionType($walletOperation->getActionType())
-            ->setActionAmount(floatval($amount) ?? floatval($walletOperation->getActionAmount()))
+            ->setActionAmount((int)($amount) ?? (int)($walletOperation->getActionAmount()))
             ->setCurrency($walletOperation->getCurrency());
     }
 }

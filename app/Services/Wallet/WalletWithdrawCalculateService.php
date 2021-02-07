@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Services\Wallet;
 
-use App\Chains\ChainOfWithdrawRules\BusinessLink;
 use App\Contracts\Services\Wallet\WalletWithdrawCalculateManagerInterface;
+use App\Contracts\Services\WithdrawRules\ClientTypeInterface;
+use App\Exceptions\ValidationException\ClientTypeException;
 use App\Models\Actions\WalletOperation;
-use GuzzleHttp\Client;
 use Illuminate\Support\Collection;
 
 /**
@@ -16,14 +16,15 @@ use Illuminate\Support\Collection;
  */
 class WalletWithdrawCalculateService implements WalletWithdrawCalculateManagerInterface
 {
-    private MathOperations $mathOperations;
+    /** @var ClientTypeInterface[] */
+    private $clientTypes;
 
-    protected Client $client;
-
-    public function __construct(MathOperations $mathOperations, Client $client)
+    public function __construct(iterable $clientTypes)
     {
-        $this->mathOperations = $mathOperations;
-        $this->client = $client;
+        /** @var ClientTypeInterface $clientType */
+        foreach ($clientTypes as $clientType) {
+            $this->clientTypes[$clientType->getType()] = $clientType;
+        }
     }
 
     public function getType(): string
@@ -31,8 +32,13 @@ class WalletWithdrawCalculateService implements WalletWithdrawCalculateManagerIn
         return self::ACTION;
     }
 
-    public function calculateCommissionFee(WalletOperation $walletOperation, Collection $userHistories): array
+    public function calculateCommissionFee(WalletOperation $walletOperation, Collection $userHistories): string
     {
-        return (new BusinessLink($walletOperation, $this->mathOperations, $this->client))->detectClientType($userHistories);
+        $clientType = $this->clientTypes[$walletOperation->getClientType()] ?? null;
+        if (null === $clientType) {
+            throw new ClientTypeException('Invalid client type');
+        }
+
+        return $clientType->detectClientType($userHistories, $walletOperation);
     }
 }

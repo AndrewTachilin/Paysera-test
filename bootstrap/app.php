@@ -84,10 +84,14 @@ $app->configure('app');
 */
 
 $app->register(App\Providers\CsvServiceProvider::class);
+$app->register(App\Providers\BusinessWithdrawCalculateServiceProvider::class);
+$app->register(App\Providers\WithdrawPrivateCalculateServiceProvider::class);
 $app->register(App\Providers\WalletDepositCalculateServiceProvider::class);
 $app->register(App\Providers\WalletWithdrawCalculateServiceProvider::class);
+$app->register(App\Providers\UsdStrategyProvider::class);
 $app->register(STS\Fixer\FixerServiceProvider::class);
 $app->register(Irazasyed\Larasupport\Providers\ArtisanServiceProvider::class);
+$app->register(Chuckrincon\LumenConfigDiscover\DiscoverServiceProvider::class);
 
 
 /*
@@ -104,7 +108,6 @@ $app->register(Irazasyed\Larasupport\Providers\ArtisanServiceProvider::class);
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
 ], function ($router) {
-    require __DIR__ . '/../routes/web.php';
 });
 
 return $app;

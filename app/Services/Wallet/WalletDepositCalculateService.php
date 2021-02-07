@@ -8,19 +8,25 @@ use App\Contracts\Services\Wallet\WalletDepositCalculateManagerInterface;
 use App\Models\Actions\WalletOperation;
 use Illuminate\Support\Collection;
 
-class WalletDepositCalculateService extends MathOperations implements WalletDepositCalculateManagerInterface
+class WalletDepositCalculateService implements WalletDepositCalculateManagerInterface
 {
-    private const COMMISSION_FEE = 0.03;
+    private MathOperations $mathOperations;
+
+    public function __construct(MathOperations $mathOperations)
+    {
+        $this->mathOperations = $mathOperations;
+    }
 
     public function getType(): string
     {
         return self::ACTION;
     }
 
-    public function calculateCommissionFee(WalletOperation $walletOperation, Collection $userHistories): array
+    public function calculateCommissionFee(WalletOperation $walletOperation, Collection $userHistories): string
     {
-        $percents = $this->calculateCommission($walletOperation->getActionAmount(), self::COMMISSION_FEE);
-
-        return  [$percents, $userHistories];
+        return $this->mathOperations->calculateCommission(
+            $walletOperation->getActionAmount(),
+            (float) config('app.commission_deposit')
+        );
     }
 }

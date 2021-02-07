@@ -45,35 +45,39 @@ class CsvService implements ParseFileInterface
     {
         $filePath = $this->getFilePath($fileName);
         $this->isFileValid($filePath, $fileName);
-
-        $file = fopen($filePath, 'r+');
-
         try {
-            while (($walletOperation = fgetcsv($file, 0, ',')) !== false) {
-                if (empty($walletOperation[0])) {
-                    continue;
-                }
-
+            $lines = $this->readFile($filePath);
+            foreach ($lines as $walletOperation) {
                 $walletOperation = (new WalletOperationDataTransformer())->transformFromArray($walletOperation);
                 $typeOfAction = (new WithdrawLink($walletOperation))->detectTypeOfAction();
-                $walletAction = $this->walletManager[$typeOfAction] ?? [];
+                $walletAction = $this->walletManager[$typeOfAction] ?? null;
 
                 if (empty($walletAction)) {
-                    throw  new WalletActionException('This type of action was not found in the system');
+                    throw new WalletActionException('This type of action was not found in the system');
                 }
 
-                list($percent, $userHistoryCollection) = $walletAction->calculateCommissionFee(
+                $percent = $walletAction->calculateCommissionFee(
                     $walletOperation,
                     $this->userHistoryCollection
                 );
 
-                $this->userHistoryCollection = $userHistoryCollection;
                 echo $percent . PHP_EOL;
             }
         } catch (\Throwable $e) {
             dd($e->getFile(), $e->getMessage(), $e->getLine());
         }
+    }
 
+    private function readFile(string $filePath): \Generator
+    {
+        $file = fopen($filePath, 'rb+');
+
+        while (($walletOperation = fgetcsv($file)) !== false) {
+            if (empty($walletOperation[0])) {
+                continue;
+            }
+            yield $walletOperation;
+        }
 
         fclose($file);
     }

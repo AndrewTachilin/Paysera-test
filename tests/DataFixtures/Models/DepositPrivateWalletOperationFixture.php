@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\DataFixtures\Models;
 
-use App\Chains\ChainOfCurrencyExchange\UsdLink;
-use App\Chains\ChainOfWithdrawRules\PrivateLink;
+use App\Chains\ChainOfCurrencyExchange\UsdStrategy;
 use App\Models\Actions\WalletOperation;
 use App\Contracts\Services\Wallet\WalletDepositCalculateManagerInterface as WalletDepositAction;
+use App\Strategies\WithdrawRules\PrivateStrategy;
 
 class DepositPrivateWalletOperationFixture
 {
@@ -16,8 +16,8 @@ class DepositPrivateWalletOperationFixture
         return (new WalletOperation())
             ->setUserId(1)
             ->setDateOfAction('2020-10-20')
-            ->setCurrency(UsdLink::USD)
-            ->setClientType(PrivateLink::CLIENT_TYPE)
+            ->setCurrency(UsdStrategy::USD)
+            ->setClientType(PrivateStrategy::CLIENT_TYPE)
             ->setActionType(WalletDepositAction::ACTION)
             ->setActionAmount(300);
     }

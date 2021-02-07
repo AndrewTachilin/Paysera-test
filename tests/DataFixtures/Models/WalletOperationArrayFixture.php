@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\DataFixtures\Models;
 
-use App\Chains\ChainOfCurrencyExchange\EuroLink;
-use App\Chains\ChainOfWithdrawRules\PrivateLink;
+use App\Chains\ChainOfCurrencyExchange\EuroStrategy;
 use App\Contracts\Services\Wallet\WalletWithdrawCalculateManagerInterface as WalletWithdrawAction;
+use App\Strategies\WithdrawRules\PrivateStrategy;
 
 class WalletOperationArrayFixture
 {
@@ -15,10 +15,10 @@ class WalletOperationArrayFixture
         return [
             '2020-10-20',
             1,
-            PrivateLink::CLIENT_TYPE,
+            PrivateStrategy::CLIENT_TYPE,
             WalletWithdrawAction::ACTION,
             10000,
-            EuroLink::EURO,
+            EuroStrategy::EURO,
 
         ];
     }

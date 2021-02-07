@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services\ParseFiles\Wallet;
 
+use App\Services\Wallet\MathOperations;
 use App\Services\Wallet\WalletDepositCalculateService;
 use Tests\DataFixtures\Collections\DepositPrivateWalletOperationCollectionFixture;
 use Tests\DataFixtures\Models\DepositPrivateWalletOperationFixture;
@@ -15,7 +16,9 @@ class WalletDepositCalculateServiceTest extends TestCase
 
     public function setUp(): void
     {
-        $this->walletDepositCalculateService = new WalletDepositCalculateService();
+        parent::setUp();
+
+        $this->walletDepositCalculateService = new WalletDepositCalculateService(new MathOperations());
     }
 
     public function testCalculateCommissionFeeReturnArray(): void
@@ -29,7 +32,6 @@ class WalletDepositCalculateServiceTest extends TestCase
             $walletOperationCollection
         );
 
-        $this->assertEquals(0.09, $result[0]);
-        $this->assertEquals($walletOperation, $result[1]->first());
+        $this->assertEquals(0.09, $result);
     }
 }

@@ -6,20 +6,18 @@ namespace App\Services\Wallet;
 
 class MathOperations
 {
-    private const PERCENT = 100;
-
     public function roundToThousandths(float $number): string
     {
-        $roundToInteger = ceil($number * self::PERCENT);
+        $roundToInteger = ceil($number * (int) config('app.total_percent'));
 
-        $roundToThousand = $roundToInteger/self::PERCENT;
+        $roundToThousand = $roundToInteger/(int) config('app.total_percent');
 
-        return number_format($roundToThousand, 2);
+        return number_format($roundToThousand, (int) config('app.numbers_after_dot'));
     }
 
     public function calculateCommission(float $amount, float $percent): string
     {
-        $percents = $amount * ($percent / self::PERCENT);
+        $percents = $amount * ($percent / (int) config('app.total_percent'));
 
         return $this->roundToThousandths($percents);
     }
