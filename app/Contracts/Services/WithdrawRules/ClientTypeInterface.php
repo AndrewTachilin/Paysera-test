@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 
 interface ClientTypeInterface
 {
-    public function detectClientType(Collection $userHistories, WalletOperation $walletOperation): string;
+    public function detectClientType(Collection $userHistories, WalletOperation $walletOperation): float;
 
     public function getType(): string;
 }

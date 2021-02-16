@@ -14,22 +14,15 @@ class WalletOperation
 
     private string $actionType;
 
-    private float $actionAmount;
+    private int $actionAmount;
 
     private string $currency;
 
-    /**
-     * @return int
-     */
     public function getUserId(): int
     {
         return $this->userId;
     }
 
-    /**
-     * @param int $userId
-     * @return $this
-     */
     public function setUserId(int $userId): self
     {
         $this->userId = $userId;
@@ -74,21 +67,18 @@ class WalletOperation
         return $this;
     }
 
-    public function getActionAmount(): float
+    public function getActionAmount(): int
     {
         return $this->actionAmount;
     }
 
-    public function setActionAmount(float $actionAmount): self
+    public function setActionAmount(int $actionAmount): self
     {
         $this->actionAmount = $actionAmount;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getCurrency(): string
     {
         return $this->currency;

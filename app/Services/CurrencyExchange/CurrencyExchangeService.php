@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Chains\ChainOfCurrencyExchange;
+namespace App\Services\CurrencyExchange;
 
-use App\Contracts\Strategies\UsdExchangeInterface;
+use App\Contracts\Strategies\EuroExchangeInterface;
 use App\Services\Wallet\MathOperations;
 
-class UsdStrategy implements UsdExchangeInterface
+class CurrencyExchangeService
 {
     private MathOperations $mathOperations;
 
@@ -16,13 +16,12 @@ class UsdStrategy implements UsdExchangeInterface
         $this->mathOperations = $mathOperations;
     }
 
-    public function getType(): string
-    {
-        return self::USD;
-    }
-
     public function exchange(string $currency, float $amount, array $currencyExchangeRates): float
     {
-        return $this->mathOperations->convertCurrency($amount, $currencyExchangeRates[$currency]);
+        if ($currency !== EuroExchangeInterface::EURO) {
+            $amount = $this->mathOperations->convertCurrency($amount, $currencyExchangeRates[$currency]);
+        }
+
+        return $amount;
     }
 }

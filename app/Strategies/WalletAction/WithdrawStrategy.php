@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Chains\ChainOfWalletAction;
+namespace App\Strategies\WalletAction;
 
-use App\Contracts\Chains\ChainOfWalletActionInterface;
+use App\Contracts\Strategies\WithdrawStrategyInterface;
 use App\Exceptions\Wallet\WalletActionException;
-use App\Contracts\Services\Wallet\WalletDepositCalculateManagerInterface as WalletAction;
 use App\Models\Actions\WalletOperation;
 
-class DepositLink implements ChainOfWalletActionInterface
+class WithdrawStrategy implements WithdrawStrategyInterface
 {
     protected WalletOperation $walletOperation;
 
@@ -18,10 +17,15 @@ class DepositLink implements ChainOfWalletActionInterface
         $this->walletOperation = $walletOperation;
     }
 
+    public function getType(): string
+    {
+        return self::TYPE;
+    }
+
     public function detectTypeOfAction(): string
     {
-        if (WalletAction::ACTION === $this->walletOperation->getActionType()) {
-            return WalletAction::ACTION;
+        if (self::TYPE  === $this->walletOperation->getActionType()) {
+            return self::TYPE;
         }
 
         throw new WalletActionException('This action was not found in the system');

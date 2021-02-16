@@ -1,10 +1,10 @@
 version: "3"
 
 services:
-  homework:
-    container_name: homework
+  homework-app:
+    container_name: homework-app
     restart: always
-    build: .
+    build: ./docker
     working_dir: /var/www
     volumes:
       - ./:/var/www

@@ -10,14 +10,6 @@ use App\Contracts\Services\ParseFiles\ParseFileInterface;
 
 class CalculateCommissionCommand extends Command
 {
-    private ParseFileInterface $parseFileService;
-
-    public function __construct(ParseFileInterface $parseFileService)
-    {
-        parent::__construct();
-
-        $this->parseFileService = $parseFileService;
-    }
     /**
      * The name and signature of the console command.
      *
@@ -32,7 +24,7 @@ class CalculateCommissionCommand extends Command
      */
     protected $description = 'Calculate commission by file';
 
-    public function getOptions()
+    public function getOptions(): array
     {
         return [
             ['fileName', null, InputOption::VALUE_REQUIRED, 'file name']
@@ -43,10 +35,14 @@ class CalculateCommissionCommand extends Command
      *
      * @return void
      */
-    public function handle(): void
+    public function handle(ParseFileInterface $parseFileService): void
     {
         try {
-            $this->parseFileService->parseFile($this->argument('fileName'));
+            $percents = $parseFileService->parseFile($this->argument('fileName'));
+
+            foreach ($percents as $percent) {
+                $this->info($percent / config('app.total_percent'));
+            }
         } catch (\Exception $e) {
             echo $e->getMessage();
         }

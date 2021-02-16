@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Tests\Unit\DataTransformer;
 
 use App\DataTransformer\WalletOperationDataTransformer;
-use App\Exceptions\ValidationException\ValidationException;
+use App\Exceptions\DataTransformer\UnableToTransformDataException;
+use App\Services\Wallet\MathOperations;
 use Tests\DataFixtures\Models\DepositPrivateWalletOperationFixture;
 use Tests\DataFixtures\Models\WalletOperationArrayFixture;
 use Tests\DataFixtures\Models\WithdrawPrivateEurHighWalletOperationFixture;
@@ -17,7 +18,7 @@ class WalletOperationDataTransformerTest extends TestCase
 
     public function setUp(): void
     {
-        $this->dataTransformer = new WalletOperationDataTransformer();
+        $this->dataTransformer = new WalletOperationDataTransformer(new MathOperations());
     }
 
     public function testTransformFromArrayToWalletReturnModel(): void
@@ -52,7 +53,7 @@ class WalletOperationDataTransformerTest extends TestCase
 
     public function testTransformUpdateModelToWalletReturnException(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(UnableToTransformDataException::class);
 
         $this->dataTransformer->transformFromArray([]);
     }

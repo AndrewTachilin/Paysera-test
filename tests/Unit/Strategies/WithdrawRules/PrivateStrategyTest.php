@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\DataTransformer;
+namespace Tests\Unit\Strategies\WithdrawRules;
 
-use App\Chains\ChainOfCurrencyExchange\EuroStrategy;
-use App\Chains\ChainOfCurrencyExchange\JpyStrategy;
-use App\Chains\ChainOfCurrencyExchange\UsdStrategy;
+use App\DataTransformer\WalletOperationDataTransformer;
+use App\Services\CurrencyExchange\CurrencyExchangeService;
 use App\Services\Wallet\MathOperations;
 use App\Strategies\WithdrawRules\PrivateStrategy;
 use GuzzleHttp\Client;
@@ -27,15 +26,12 @@ class PrivateStrategyTest extends TestCase
 
         $mathOperations = new MathOperations();
 
-        $currencyExchange = [
-            new UsdStrategy($mathOperations),
-            new JpyStrategy($mathOperations),
-            new EuroStrategy($mathOperations),
-        ];
+        $currencyExchange = new CurrencyExchangeService($mathOperations);
         $this->privateStrategy = new PrivateStrategy(
             $mathOperations,
             new Client(),
-            $currencyExchange
+            $currencyExchange,
+            new WalletOperationDataTransformer($mathOperations)
         );
     }
 
@@ -46,7 +42,7 @@ class PrivateStrategyTest extends TestCase
 
         $result = $this->privateStrategy->detectClientType($walletCollection, $walletModel);
 
-        $this->assertIsFloat(0.00, $result);
+        $this->assertEquals(0.00, $result);
     }
 
     public function testCommissionFreeOnFourthStepTakeCommissionReturnAmountCommission(): void
@@ -56,7 +52,7 @@ class PrivateStrategyTest extends TestCase
 
         $result = $this->privateStrategy->detectClientType($walletCollection, $walletModel);
 
-        $this->assertIsFloat(0.90, $result);
+        $this->assertEquals(0.90, $result);
     }
 
     public function testCommissionOnBigAmountResultAmountCommission(): void
@@ -66,6 +62,6 @@ class PrivateStrategyTest extends TestCase
 
         $result = $this->privateStrategy->detectClientType($walletCollection, $walletModel);
 
-        $this->assertIsFloat(30.00, $result);
+        $this->assertEquals(30.00, $result);
     }
 }

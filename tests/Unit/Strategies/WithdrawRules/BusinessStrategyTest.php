@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\DataTransformer;
+namespace Tests\Unit\Strategies\WithdrawRules;
 
+use App\DataTransformer\WalletOperationDataTransformer;
 use App\Services\Wallet\MathOperations;
 use App\Strategies\WithdrawRules\BusinessStrategy;
 use Tests\DataFixtures\Collections\WithdrawBusinessEurWalletOperationCollectionFixture;
@@ -17,7 +18,8 @@ class BusinessStrategyTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->businessStrategy = new BusinessStrategy(new MathOperations());
+        $mathOperation = new MathOperations();
+        $this->businessStrategy = new BusinessStrategy($mathOperation, new WalletOperationDataTransformer($mathOperation));
     }
 
     public function testCommissionFreeOnFirstActionBusinessReturnCommission(): void
@@ -27,6 +29,6 @@ class BusinessStrategyTest extends TestCase
 
         $result = $this->businessStrategy->detectClientType($walletCollection, $walletModel);
 
-        $this->assertIsFloat(1.50, $result);
+        $this->assertEquals(1.0, $result);
     }
 }

@@ -14,9 +14,12 @@ class BusinessStrategy implements BusinessStrategyInterface
 {
     private MathOperations $mathOperations;
 
-    public function __construct(MathOperations $mathOperations)
+    private WalletOperationDataTransformer $dataTransformer;
+
+    public function __construct(MathOperations $mathOperations, WalletOperationDataTransformer $dataTransformer)
     {
         $this->mathOperations = $mathOperations;
+        $this->dataTransformer = $dataTransformer;
     }
 
     public function getType(): string
@@ -24,11 +27,11 @@ class BusinessStrategy implements BusinessStrategyInterface
         return self::CLIENT_TYPE;
     }
 
-    public function detectClientType(Collection $userHistories, WalletOperation $walletOperation): string
+    public function detectClientType(Collection $userHistories, WalletOperation $walletOperation): float
     {
         $commissionFee = $this->mathOperations->calculateCommission(
-            $walletOperation->getActionAmount(),
-            (float) config('app.commission_business_withdraw')
+            (string) $walletOperation->getActionAmount(),
+            config('app.commission_business_withdraw')
         );
 
         $this->addUserHistory($walletOperation, $userHistories);
@@ -41,9 +44,7 @@ class BusinessStrategy implements BusinessStrategyInterface
         Collection $userHistoryCollection,
         $exchangedCurrency = null
     ): void {
-        $walletOperation = (new WalletOperationDataTransformer())
-            ->resetAmountWalletOperation($walletOperation, $exchangedCurrency);
-
+        $walletOperation = $this->dataTransformer->resetAmountWalletOperation($walletOperation, $exchangedCurrency);
         $userHistoryCollection->add($walletOperation);
     }
 }

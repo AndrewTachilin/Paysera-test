@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\DataFixtures\Models;
 
-use App\Chains\ChainOfCurrencyExchange\EuroStrategy;
 use App\Contracts\Services\Wallet\WalletWithdrawCalculateManagerInterface as WalletWithdrawAction;
+use App\Contracts\Strategies\EuroExchangeInterface;
 use App\Strategies\WithdrawRules\PrivateStrategy;
 
 class WalletOperationArrayFixture
@@ -18,7 +18,7 @@ class WalletOperationArrayFixture
             PrivateStrategy::CLIENT_TYPE,
             WalletWithdrawAction::ACTION,
             10000,
-            EuroStrategy::EURO,
+            EuroExchangeInterface::EURO,
 
         ];
     }

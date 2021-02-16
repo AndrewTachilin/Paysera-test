@@ -6,18 +6,18 @@ namespace App\Services\Wallet;
 
 class MathOperations
 {
-    public function roundToThousandths(float $number): string
+    public function roundToThousandths(string $number): float
     {
         $roundToInteger = ceil($number * (int) config('app.total_percent'));
 
-        $roundToThousand = $roundToInteger/(int) config('app.total_percent');
-
-        return number_format($roundToThousand, (int) config('app.numbers_after_dot'));
+        return $roundToInteger/(int) config('app.total_percent');
     }
 
-    public function calculateCommission(float $amount, float $percent): string
+    public function calculateCommission(string $amount, string $percent): float
     {
-        $percents = $amount * ($percent / (int) config('app.total_percent'));
+        $percent = $percent / (int) config('app.total_percent');
+
+        $percents = bcmul($amount, (string) $percent);
 
         return $this->roundToThousandths($percents);
     }
@@ -25,5 +25,12 @@ class MathOperations
     public function convertCurrency(float $fromCurrency, float $rate): float
     {
         return $fromCurrency * $rate;
+    }
+
+    public function convertToKopecks(string $amount): int
+    {
+        $amount = $this->roundToThousandths($amount);
+
+        return (int) bcmul((string) $amount, config('app.total_percent'));
     }
 }

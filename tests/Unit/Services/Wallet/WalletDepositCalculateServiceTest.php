@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Services\ParseFiles\Wallet;
+namespace Tests\Unit\Services\Wallet;
 
 use App\Services\Wallet\MathOperations;
 use App\Services\Wallet\WalletDepositCalculateService;
@@ -32,6 +32,6 @@ class WalletDepositCalculateServiceTest extends TestCase
             $walletOperationCollection
         );
 
-        $this->assertEquals(0.09, $result);
+        $this->assertEquals('0.00', $result);
     }
 }

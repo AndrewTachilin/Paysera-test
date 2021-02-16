@@ -1,6 +1,8 @@
 <?php
 
-namespace Tests\Unit\Services\ParseFiles\Wallet;
+declare(strict_types=1);
+
+namespace Tests\Unit\Services\Wallet;
 
 use App\Services\Wallet\MathOperations;
 use Tests\TestCase;
@@ -18,8 +20,9 @@ class MathOperationsTest extends TestCase
 
     public function testCalculateCommissionReturnCommission(): void
     {
-        $fromAmount = 1000;
-        $percent = 10;
+        $fromAmount = '1000';
+        $percent = '10';
+
         $result = $this->mathOperations->calculateCommission($fromAmount, $percent);
 
         $this->assertEquals(100, $result);
@@ -27,11 +30,11 @@ class MathOperationsTest extends TestCase
 
     public function testCalculateCommissionReturnCommissionWithFloat(): void
     {
-        $fromAmount = 10;
-        $percent = 0.1;
+        $fromAmount = '10';
+        $percent = '0.1';
         $result = $this->mathOperations->calculateCommission($fromAmount, $percent);
 
-        $this->assertEquals(0.01, $result);
+        $this->assertEquals('0.00', $result);
     }
 
     public function testConvertCurrencyReturnInt(): void
@@ -45,7 +48,7 @@ class MathOperationsTest extends TestCase
 
     public function testRoundToThousandthsWithBelowFiveValueReturnHigherValue(): void
     {
-        $number = 10.334;
+        $number = '10.334';
         $result = $this->mathOperations->roundToThousandths($number);
 
         $this->assertEquals(10.34, $result);
@@ -53,7 +56,7 @@ class MathOperationsTest extends TestCase
 
     public function testRoundToThousandthsWithUpperFiveValueReturnHigherValue(): void
     {
-        $number = 10.337;
+        $number = '10.337';
         $result = $this->mathOperations->roundToThousandths($number);
 
         $this->assertEquals(10.34, $result);

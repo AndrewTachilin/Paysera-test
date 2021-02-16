@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\Services\ParseFiles;
 
+use App\Contracts\Strategies\ActionStrategyInterface;
 use App\DataTransformer\WalletOperationDataTransformer;
-use App\Exceptions\Wallet\WalletActionException;
-use App\Chains\ChainOfWalletAction\WithdrawLink;
+use App\Exceptions\ParseFile\ParseFileException;
 use App\Contracts\Services\ParseFiles\ParseFileInterface;
 use App\Exceptions\File\FileInvalidException;
 use App\Exceptions\File\FileNotFoundException;
 use App\Contracts\Services\Wallet\WalletCalculateManagerInterface;
+use App\Services\Wallet\MathOperations;
 use Illuminate\Support\Collection;
+use Symfony\Component\HttpFoundation\Response;
 
 class CsvService implements ParseFileInterface
 {
@@ -22,50 +24,55 @@ class CsvService implements ParseFileInterface
      */
     private $walletManager;
 
+    /**
+     * @var ActionStrategyInterface[]
+     */
+    private $typeAction;
+
     private Collection $userHistoryCollection;
 
     public function __construct(
-        iterable $actionWallets
+        iterable $actionWallets,
+        iterable $actionTypes
     ) {
         $this->userHistoryCollection = collect();
         /** @var WalletCalculateManagerInterface $actionWallet */
         foreach ($actionWallets as $actionWallet) {
             $this->walletManager[$actionWallet->getType()] = $actionWallet;
         }
+
+        /** @var ActionStrategyInterface $actionType **/
+        foreach ($actionTypes as $actionType) {
+            $this->typeAction[$actionType->getType()] = $actionType;
+        }
     }
 
-    /**
-     * @param string $fileName
-     *
-     * @throws FileInvalidException
-     *
-     * @throws FileNotFoundException
-     */
-    public function parseFile(string $fileName): void
+    public function parseFile(string $fileName): array
     {
         $filePath = $this->getFilePath($fileName);
         $this->isFileValid($filePath, $fileName);
+        $result = [];
+
         try {
             $lines = $this->readFile($filePath);
-            foreach ($lines as $walletOperation) {
-                $walletOperation = (new WalletOperationDataTransformer())->transformFromArray($walletOperation);
-                $typeOfAction = (new WithdrawLink($walletOperation))->detectTypeOfAction();
-                $walletAction = $this->walletManager[$typeOfAction] ?? null;
 
-                if (empty($walletAction)) {
-                    throw new WalletActionException('This type of action was not found in the system');
-                }
+            foreach ($lines as $walletOperation) {
+                $walletOperation = (new WalletOperationDataTransformer(new MathOperations()))->transformFromArray($walletOperation);
+                $typeOfAction = $this->typeAction[$walletOperation->getActionType()] ?? null;
+                $walletAction = $this->walletManager[$typeOfAction->getType()] ?? null;
 
                 $percent = $walletAction->calculateCommissionFee(
                     $walletOperation,
                     $this->userHistoryCollection
                 );
 
-                echo $percent . PHP_EOL;
+                $result[] = $percent;
             }
         } catch (\Throwable $e) {
-            dd($e->getFile(), $e->getMessage(), $e->getLine());
+            throw new ParseFileException($e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
+
+        return $result;
     }
 
     private function readFile(string $filePath): \Generator
@@ -82,13 +89,6 @@ class CsvService implements ParseFileInterface
         fclose($file);
     }
 
-    /**
-     * @param string $filePath
-     * @param string $fileName
-     *
-     * @throws FileInvalidException
-     * @throws FileNotFoundException
-     */
     private function isFileValid(string $filePath, string $fileName): void
     {
         $this->isPathValid($filePath);
@@ -98,7 +98,7 @@ class CsvService implements ParseFileInterface
     private function isPathValid(string $filePath): string
     {
         if (!file_exists($filePath)) {
-            throw new FileNotFoundException('File not found', 404);
+            throw new FileNotFoundException('File not found', Response::HTTP_NOT_FOUND);
         }
 
         return $filePath;
@@ -109,13 +109,13 @@ class CsvService implements ParseFileInterface
         $parsedFileName = explode('.', $fileName);
 
         if (empty($parsedFileName)) {
-            throw new FileInvalidException('File is not valid', 400);
+            throw new FileInvalidException('File is not valid', Response::HTTP_BAD_REQUEST);
         }
 
         $fileExtension = last($parsedFileName);
 
         if (strcasecmp($fileExtension, self::VALID_FILE_EXTENSION)) {
-            throw new FileInvalidException('Invalid File extension ', 400);
+            throw new FileInvalidException('Invalid File extension ', Response::HTTP_BAD_REQUEST);
         }
     }
 

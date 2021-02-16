@@ -17,7 +17,9 @@ class WalletDepositCalculateServiceProvider extends ServiceProvider
         $this->app->tag([WalletDepositCalculateManagerInterface::class], ['wallet-action']);
 
         $this->app->singleton(WalletDepositCalculateManagerInterface::class, function (Container $app) {
-            return new WalletDepositCalculateService(new MathOperations());
+            return new WalletDepositCalculateService(
+                $app->get(MathOperations::class)
+            );
         });
     }
 }

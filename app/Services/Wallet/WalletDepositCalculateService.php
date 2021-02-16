@@ -22,11 +22,11 @@ class WalletDepositCalculateService implements WalletDepositCalculateManagerInte
         return self::ACTION;
     }
 
-    public function calculateCommissionFee(WalletOperation $walletOperation, Collection $userHistories): string
+    public function calculateCommissionFee(WalletOperation $walletOperation, Collection $userHistories): float
     {
         return $this->mathOperations->calculateCommission(
-            $walletOperation->getActionAmount(),
-            (float) config('app.commission_deposit')
+            (string) $walletOperation->getActionAmount(),
+            config('app.commission_deposit')
         );
     }
 }

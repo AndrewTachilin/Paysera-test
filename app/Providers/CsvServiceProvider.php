@@ -15,7 +15,8 @@ class CsvServiceProvider extends ServiceProvider
     {
         $this->app->singleton(ParseFileInterface::class, function (Container $app) {
             return new CsvService(
-                $app->tagged('wallet-action')
+                $app->tagged('wallet-action'),
+                $app->tagged('wallet-type-action')
             );
         });
     }

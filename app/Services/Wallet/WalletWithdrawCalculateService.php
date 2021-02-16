@@ -32,10 +32,10 @@ class WalletWithdrawCalculateService implements WalletWithdrawCalculateManagerIn
         return self::ACTION;
     }
 
-    public function calculateCommissionFee(WalletOperation $walletOperation, Collection $userHistories): string
+    public function calculateCommissionFee(WalletOperation $walletOperation, Collection $userHistories): float
     {
         $clientType = $this->clientTypes[$walletOperation->getClientType()] ?? null;
-        if (null === $clientType) {
+        if ($clientType === null) {
             throw new ClientTypeException('Invalid client type');
         }
 

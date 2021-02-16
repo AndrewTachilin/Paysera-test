@@ -6,6 +6,8 @@ namespace App\Providers;
 
 use App\Contracts\Strategies\BusinessStrategyInterface;
 use App\Contracts\Strategies\PrivateStrategyInterface;
+use App\DataTransformer\WalletOperationDataTransformer;
+use App\Services\CurrencyExchange\CurrencyExchangeService;
 use App\Services\Wallet\MathOperations;
 use App\Strategies\WithdrawRules\PrivateStrategy;
 use GuzzleHttp\Client;
@@ -21,9 +23,10 @@ class ClientTypeProvider extends ServiceProvider
 
         $this->app->singleton(PrivateStrategyInterface::class, function (Container $app) {
             return new PrivateStrategy(
-                new MathOperations(),
+                $app->get(MathOperations::class),
                 new Client(),
-                $app->tagged('currency-exchange')
+                new CurrencyExchangeService($app->get(MathOperations::class)),
+                new WalletOperationDataTransformer($app->get(MathOperations::class))
             );
         });
     }
