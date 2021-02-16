@@ -12,7 +12,6 @@ use App\Exceptions\File\FileInvalidException;
 use App\Exceptions\File\FileNotFoundException;
 use App\Contracts\Services\Wallet\WalletCalculateManagerInterface;
 use App\Exceptions\Wallet\WalletActionException;
-use App\Services\Wallet\MathOperations;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -62,7 +61,7 @@ class CsvService implements ParseFileInterface
             $lines = $this->readFile($filePath);
 
             foreach ($lines as $walletOperation) {
-                $walletOperation = (new WalletOperationDataTransformer(new MathOperations()))->transformFromArray($walletOperation);
+                $walletOperation = $this->dataTransformer->transformFromArray($walletOperation);
                 $typeOfAction = $this->typeAction[$walletOperation->getActionType()] ?? null;
 
                 if (empty($typeOfAction)) {
