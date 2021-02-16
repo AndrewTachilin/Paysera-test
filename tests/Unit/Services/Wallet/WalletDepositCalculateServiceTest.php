@@ -32,6 +32,6 @@ class WalletDepositCalculateServiceTest extends TestCase
             $walletOperationCollection
         );
 
-        $this->assertEquals('0.00', $result);
+        $this->assertEquals(9, $result);
     }
 }

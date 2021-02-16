@@ -11,6 +11,7 @@ use App\Contracts\Services\ParseFiles\ParseFileInterface;
 use App\Exceptions\File\FileInvalidException;
 use App\Exceptions\File\FileNotFoundException;
 use App\Contracts\Services\Wallet\WalletCalculateManagerInterface;
+use App\Exceptions\Wallet\WalletActionException;
 use App\Services\Wallet\MathOperations;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,10 +32,14 @@ class CsvService implements ParseFileInterface
 
     private Collection $userHistoryCollection;
 
+    private WalletOperationDataTransformer $dataTransformer;
+
     public function __construct(
+        WalletOperationDataTransformer $dataTransformer,
         iterable $actionWallets,
         iterable $actionTypes
     ) {
+        $this->dataTransformer = $dataTransformer;
         $this->userHistoryCollection = collect();
         /** @var WalletCalculateManagerInterface $actionWallet */
         foreach ($actionWallets as $actionWallet) {
@@ -59,8 +64,15 @@ class CsvService implements ParseFileInterface
             foreach ($lines as $walletOperation) {
                 $walletOperation = (new WalletOperationDataTransformer(new MathOperations()))->transformFromArray($walletOperation);
                 $typeOfAction = $this->typeAction[$walletOperation->getActionType()] ?? null;
+
+                if (empty($typeOfAction)) {
+                    throw new WalletActionException('This action was not found in the system');
+                }
                 $walletAction = $this->walletManager[$typeOfAction->getType()] ?? null;
 
+                if (empty($walletAction)) {
+                    throw new WalletActionException('This type of action was not found in the system');
+                }
                 $percent = $walletAction->calculateCommissionFee(
                     $walletOperation,
                     $this->userHistoryCollection

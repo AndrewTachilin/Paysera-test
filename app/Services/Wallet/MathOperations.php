@@ -4,33 +4,36 @@ declare(strict_types=1);
 
 namespace App\Services\Wallet;
 
-class MathOperations
-{
-    public function roundToThousandths(string $number): float
-    {
-        $roundToInteger = ceil($number * (int) config('app.total_percent'));
+use App\Contracts\Services\Wallet\WalletOperationsInterface;
 
-        return $roundToInteger/(int) config('app.total_percent');
+class MathOperations implements WalletOperationsInterface
+{
+    public function roundToThousandths(string $amount): int
+    {
+        $amountInCoins = bcmul($amount, config('app.total_percent'));
+        $roundToInteger = ceil((int) $amountInCoins);
+
+        return intval($roundToInteger / (int) config('app.total_percent'));
     }
 
-    public function calculateCommission(string $amount, string $percent): float
+    public function calculateCommission(string $amount, string $percent): int
     {
         $percent = $percent / (int) config('app.total_percent');
-
         $percents = bcmul($amount, (string) $percent);
 
         return $this->roundToThousandths($percents);
     }
 
-    public function convertCurrency(float $fromCurrency, float $rate): float
+    public function convertCurrency(float $fromCurrency, float $rate): int
     {
-        return $fromCurrency * $rate;
+        return (int) bcmul((string) $fromCurrency, (string) $rate);
     }
 
     public function convertToKopecks(string $amount): int
     {
         $amount = $this->roundToThousandths($amount);
+        $kopecks = bcmul((string) $amount, config('app.total_percent'));
 
-        return (int) bcmul((string) $amount, config('app.total_percent'));
+        return intval($kopecks);
     }
 }

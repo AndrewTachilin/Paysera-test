@@ -18,6 +18,7 @@ class WalletOperationDataTransformerTest extends TestCase
 
     public function setUp(): void
     {
+        parent::setUp();
         $this->dataTransformer = new WalletOperationDataTransformer(new MathOperations());
     }
 

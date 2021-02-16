@@ -17,7 +17,7 @@ class WalletOperationArrayFixture
             1,
             PrivateStrategy::CLIENT_TYPE,
             WalletWithdrawAction::ACTION,
-            10000,
+            '10000',
             EuroExchangeInterface::EURO,
 
         ];

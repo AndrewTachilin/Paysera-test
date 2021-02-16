@@ -15,8 +15,6 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        $this->app->singleton(MathOperations::class, function () {
-            return new MathOperations();
-        });
+        $this->app->singleton(MathOperations::class, MathOperations::class);
     }
 }

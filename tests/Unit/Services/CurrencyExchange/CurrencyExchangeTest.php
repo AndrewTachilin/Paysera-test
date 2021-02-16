@@ -40,7 +40,7 @@ class CurrencyExchangeTest extends TestCase
         $fromAmount = 1000;
         $result = $this->currencyExchange->exchange(UsdExchangeInterface::USD, $fromAmount, $this->currencyExchangeRate);
 
-        $this->assertEquals(1199.6, $result);
+        $this->assertEquals(1199, $result);
     }
 
     public function testCalculateCommissionForJpyReturnAmount(): void

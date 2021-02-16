@@ -29,6 +29,6 @@ class BusinessStrategyTest extends TestCase
 
         $result = $this->businessStrategy->detectClientType($walletCollection, $walletModel);
 
-        $this->assertEquals(1.0, $result);
+        $this->assertEquals(150, $result);
     }
 }

@@ -19,6 +19,6 @@ class DepositPrivateUsdWalletOperationFixture
             ->setCurrency(UsdExchangeInterface::USD)
             ->setClientType(PrivateStrategy::CLIENT_TYPE)
             ->setActionType(WalletDepositAction::ACTION)
-            ->setActionAmount(300);
+            ->setActionAmount(30000);
     }
 }

@@ -52,7 +52,7 @@ class WalletWithdrawCalculateServiceTest extends TestCase
         ]);
     }
 
-    public function testCalculateCommissionFeeForPrivateEurTypeReturnArray(): void
+    public function testCalculateCommissionFeeForPrivateEurTypeReturnInt(): void
     {
         $walletOperation = WithdrawPrivateEurWalletOperationFixture::get();
         $walletOperationCollection = WithdrawPrivateEurWalletOperationCollectionFixture::get();
@@ -65,7 +65,7 @@ class WalletWithdrawCalculateServiceTest extends TestCase
         $this->assertEquals(0.00, $result);
     }
 
-    public function testCalculateCommissionFeeForBusinessEurTypeReturnFlaot(): void
+    public function testCalculateCommissionFeeForBusinessEurTypeReturnInt(): void
     {
         $walletOperation = WithdrawBusinessWalletOperationFixture::get();
         $walletOperationCollection = WithdrawBusinessEurWalletOperationCollectionFixture::get();
@@ -75,10 +75,10 @@ class WalletWithdrawCalculateServiceTest extends TestCase
             $walletOperationCollection
         );
 
-        $this->assertEquals(1, $result);
+        $this->assertEquals(150, $result);
     }
 
-    public function testUserMadeFourActionTypeCommissionWillTakenReturnArray(): void
+    public function testUserMadeFourActionTypeCommissionWillTakenReturnInt(): void
     {
         $walletOperation = WithdrawPrivateEurHighWalletOperationFixture::get();
         $walletOperationCollection = WithdrawPrivateHighAmountActionCollection::get();
@@ -88,6 +88,6 @@ class WalletWithdrawCalculateServiceTest extends TestCase
             $walletOperationCollection
         );
 
-        $this->assertEquals(30.00, $result);
+        $this->assertEquals(3000, $result);
     }
 }

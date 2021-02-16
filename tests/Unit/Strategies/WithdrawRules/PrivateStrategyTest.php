@@ -52,7 +52,7 @@ class PrivateStrategyTest extends TestCase
 
         $result = $this->privateStrategy->detectClientType($walletCollection, $walletModel);
 
-        $this->assertEquals(0.90, $result);
+        $this->assertEquals(90, $result);
     }
 
     public function testCommissionOnBigAmountResultAmountCommission(): void
@@ -62,6 +62,6 @@ class PrivateStrategyTest extends TestCase
 
         $result = $this->privateStrategy->detectClientType($walletCollection, $walletModel);
 
-        $this->assertEquals(30.00, $result);
+        $this->assertEquals(3000, $result);
     }
 }

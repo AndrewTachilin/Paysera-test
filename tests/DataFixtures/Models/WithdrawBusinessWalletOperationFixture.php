@@ -19,6 +19,6 @@ class WithdrawBusinessWalletOperationFixture
             ->setCurrency(EuroExchangeInterface::EURO)
             ->setClientType(BusinessStrategyInterface::CLIENT_TYPE)
             ->setActionType(WalletDepositAction::ACTION)
-            ->setActionAmount(300);
+            ->setActionAmount(30000);
     }
 }

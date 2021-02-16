@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Contracts\Services\Wallet\WalletDepositCalculateManagerInterface;
-use App\Services\Wallet\MathOperations;
 use App\Services\Wallet\WalletDepositCalculateService;
-use Illuminate\Container\Container;
 use Illuminate\Support\ServiceProvider;
 
 class WalletDepositCalculateServiceProvider extends ServiceProvider
@@ -16,10 +14,6 @@ class WalletDepositCalculateServiceProvider extends ServiceProvider
     {
         $this->app->tag([WalletDepositCalculateManagerInterface::class], ['wallet-action']);
 
-        $this->app->singleton(WalletDepositCalculateManagerInterface::class, function (Container $app) {
-            return new WalletDepositCalculateService(
-                $app->get(MathOperations::class)
-            );
-        });
+        $this->app->singleton(WalletDepositCalculateManagerInterface::class, WalletDepositCalculateService::class);
     }
 }

@@ -19,6 +19,6 @@ class WithdrawPrivateEurHighWalletOperationFixture
             ->setCurrency(EuroExchangeInterface::EURO)
             ->setClientType(PrivateStrategyInterface::CLIENT_TYPE)
             ->setActionType(WalletWithdrawAction::ACTION)
-            ->setActionAmount(10000);
+            ->setActionAmount(1000000);
     }
 }
