@@ -86,7 +86,7 @@ $app->configure('app');
 $app->register(App\Providers\CsvServiceProvider::class);
 $app->register(App\Providers\BusinessWithdrawCalculateServiceProvider::class);
 $app->register(App\Providers\WithdrawPrivateCalculateServiceProvider::class);
-$app->register(App\Providers\AppServiceProvider::class);
+$app->register(App\Providers\WithdrawBusinessCalculateServiceProvider::class);
 $app->register(App\Providers\DepositStrategyProvider::class);
 $app->register(App\Providers\WithdrawStrategyProvider::class);
 $app->register(App\Providers\WalletDepositCalculateServiceProvider::class);

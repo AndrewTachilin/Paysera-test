@@ -64,12 +64,12 @@ class CsvService implements ParseFileInterface
                 $walletOperation = $this->dataTransformer->transformFromArray($walletOperation);
                 $typeOfAction = $this->typeAction[$walletOperation->getActionType()] ?? null;
 
-                if (empty($typeOfAction)) {
+                if ($typeOfAction === null) {
                     throw new WalletActionException('This action was not found in the system');
                 }
                 $walletAction = $this->walletManager[$typeOfAction->getType()] ?? null;
 
-                if (empty($walletAction)) {
+                if ($walletAction === null) {
                     throw new WalletActionException('This type of action was not found in the system');
                 }
                 $percent = $walletAction->calculateCommissionFee(
