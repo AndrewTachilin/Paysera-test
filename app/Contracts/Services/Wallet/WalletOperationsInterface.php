@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Contracts\Services\Wallet;
 
-
 interface WalletOperationsInterface
 {
     public function roundToThousandths(string $amount): int;
