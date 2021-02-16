@@ -13,7 +13,6 @@ class DepositStrategyProvider extends ServiceProvider
     public function boot()
     {
         $this->app->tag([DepositStrategyInterface::class], ['wallet-type-action']);
-
         $this->app->singleton(DepositStrategyInterface::class, DepositStrategy::class);
     }
 }

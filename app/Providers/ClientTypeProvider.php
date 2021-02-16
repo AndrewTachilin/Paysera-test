@@ -15,7 +15,6 @@ class ClientTypeProvider extends ServiceProvider
     {
         $this->app->tag([PrivateStrategyInterface::class], ['client-type']);
         $this->app->tag([BusinessStrategyInterface::class], ['client-type']);
-
         $this->app->singleton(PrivateStrategyInterface::class, PrivateStrategy::class);
     }
 }

@@ -14,7 +14,6 @@ class WalletWithdrawCalculateServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app->tag([WalletWithdrawCalculateManagerInterface::class], ['wallet-action']);
-
         $this->app->singleton(WalletWithdrawCalculateManagerInterface::class, function (Container $app) {
             return new WalletWithdrawCalculateService(
                 $app->tagged('client-type')

@@ -13,7 +13,6 @@ class BusinessWithdrawCalculateServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app->tag([BusinessStrategy::class], ['client-type']);
-
         $this->app->singleton(ClientTypeInterface::class, BusinessStrategy::class);
     }
 }

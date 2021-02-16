@@ -13,7 +13,6 @@ class WithdrawStrategyProvider extends ServiceProvider
     public function boot()
     {
         $this->app->tag([WithdrawStrategyInterface::class], ['wallet-type-action']);
-
         $this->app->singleton(WithdrawStrategyInterface::class, WithdrawStrategy::class);
     }
 }

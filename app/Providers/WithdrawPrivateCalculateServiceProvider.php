@@ -13,7 +13,6 @@ class WithdrawPrivateCalculateServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app->tag([PrivateStrategyInterface::class], ['client-type']);
-
         $this->app->singleton(PrivateStrategyInterface::class, PrivateStrategy::class);
     }
 }

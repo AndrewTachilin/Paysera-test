@@ -13,7 +13,6 @@ class WalletDepositCalculateServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app->tag([WalletDepositCalculateManagerInterface::class], ['wallet-action']);
-
         $this->app->singleton(WalletDepositCalculateManagerInterface::class, WalletDepositCalculateService::class);
     }
 }
