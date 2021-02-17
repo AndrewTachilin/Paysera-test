@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Strategies\WithdrawRules;
 
-use App\Contracts\Strategies\PrivateStrategyInterface;
+use App\Contracts\Services\WithdrawRules\ClientTypeInterface;
 use App\DataTransformer\WalletOperationDataTransformer;
 use App\Exceptions\Wallet\WalletActionException;
 use App\Models\Actions\WalletOperation;
@@ -17,15 +17,17 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Collection;
 
-class PrivateStrategy implements PrivateStrategyInterface
+class PrivateStrategy implements ClientTypeInterface
 {
     private Client $client;
 
-    protected MathOperations $mathOperations;
+    private MathOperations $mathOperations;
 
     private CurrencyExchangeService $currencyExchange;
 
     private WalletOperationDataTransformer $dataTransformer;
+
+    private $walletActionType;
 
     public function __construct(
         MathOperations $mathOperations,
@@ -37,11 +39,12 @@ class PrivateStrategy implements PrivateStrategyInterface
         $this->client = $client;
         $this->currencyExchange = $currencyExchanges;
         $this->dataTransformer = $dataTransformer;
+        $this->walletActionType = config('app.wallet_types.wallet_action_type_private');
     }
 
     public function getType(): string
     {
-        return self::CLIENT_TYPE;
+        return $this->walletActionType;
     }
 
     public function detectClientType(Collection $userHistories, WalletOperation $walletOperation): float

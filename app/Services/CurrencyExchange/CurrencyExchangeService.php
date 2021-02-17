@@ -17,7 +17,7 @@ class CurrencyExchangeService
 
     public function exchange(string $currency, float $amount, array $currencyExchangeRates): float
     {
-        $defaultCurrency = config('app.default_currency');
+        $defaultCurrency = config('app.currencies.default_currency');
         if ($currency !== $defaultCurrency) {
             $amount = $this->mathOperations->convertCurrency($amount, $currencyExchangeRates[$currency]);
         }

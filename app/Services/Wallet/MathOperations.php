@@ -18,7 +18,7 @@ class MathOperations implements WalletOperationsInterface
 
     public function calculateCommission(string $amount, string $percent): int
     {
-        $percent = $percent / (int) config('app.total_percent');
+        $percent = bcdiv($percent, config('app.total_percent'), 4);
         $percents = bcmul($amount, (string) $percent);
 
         return $this->roundToThousandths($percents);

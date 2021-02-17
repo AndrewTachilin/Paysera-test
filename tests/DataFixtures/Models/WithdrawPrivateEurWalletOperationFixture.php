@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\DataFixtures\Models;
 
 use App\Models\Actions\WalletOperation;
-use App\Strategies\WithdrawRules\PrivateStrategy;
 
 class WithdrawPrivateEurWalletOperationFixture
 {
@@ -14,9 +13,9 @@ class WithdrawPrivateEurWalletOperationFixture
         return (new WalletOperation())
             ->setUserId(1)
             ->setDateOfAction('2020-10-20')
-            ->setCurrency(config('app.default_currency'))
-            ->setClientType(PrivateStrategy::CLIENT_TYPE)
-            ->setActionType(config('app.wallet_action_withdraw'))
+            ->setCurrency(config('app.currencies.default_currency'))
+            ->setClientType(config('app.wallet_types.wallet_action_type_private'))
+            ->setActionType(config('app.wallet_actions.wallet_action_withdraw'))
             ->setActionAmount(30000);
     }
 }

@@ -20,7 +20,7 @@ class DepositStrategyTest extends TestCase
         $this->depositStrategy = new DepositStrategy($model);
         $result = $this->depositStrategy->detectTypeOfAction();
 
-        $this->assertEquals(config('app.wallet_action_deposit'), $result);
+        $this->assertEquals(config('app.wallet_actions.wallet_action_deposit'), $result);
     }
 
     public function testDetectTypeOfActionReturnException(): void

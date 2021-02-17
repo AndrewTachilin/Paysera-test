@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Strategies\WalletAction;
 
-use App\Contracts\Strategies\WithdrawStrategyInterface;
+use App\Contracts\Strategies\ActionStrategyInterface;
 use App\Exceptions\Wallet\WalletActionException;
 use App\Models\Actions\WalletOperation;
 
-class WithdrawStrategy implements WithdrawStrategyInterface
+class WithdrawStrategy implements ActionStrategyInterface
 {
     private WalletOperation $walletOperation;
 
@@ -17,7 +17,7 @@ class WithdrawStrategy implements WithdrawStrategyInterface
     public function __construct(WalletOperation $walletOperation)
     {
         $this->walletOperation = $walletOperation;
-        $this->walletAction = config('app.wallet_action_withdraw');
+        $this->walletAction = config('app.wallet_actions.wallet_action_withdraw');
     }
 
     public function getType(): string

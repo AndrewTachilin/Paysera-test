@@ -29,7 +29,7 @@ class WalletWithdrawCalculateService implements WalletCalculateManagerInterface
 
     public function getType(): string
     {
-        return config('app.wallet_action_withdraw');
+        return config('app.wallet_actions.wallet_action_withdraw');
     }
 
     public function calculateCommissionFee(WalletOperation $walletOperation, Collection $userHistories): float

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Strategies\WalletAction;
 
-use App\Contracts\Strategies\WithdrawStrategyInterface;
 use App\Exceptions\Wallet\WalletActionException;
 use App\Strategies\WalletAction\WithdrawStrategy;
 use Tests\DataFixtures\Models\DepositPrivateWalletOperationFixture;
@@ -20,7 +19,7 @@ class WithdrawStrategyTest extends TestCase
 
         $result = $withdrawStrategy->detectTypeOfAction();
 
-        $this->assertEquals(WithdrawStrategyInterface::TYPE, $result);
+        $this->assertEquals(config('app.wallet_actions.wallet_action_withdraw'), $result);
     }
 
     public function testDetectTypeOfActionReturnException(): void

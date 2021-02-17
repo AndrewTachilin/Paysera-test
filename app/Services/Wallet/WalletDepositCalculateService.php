@@ -19,7 +19,7 @@ class WalletDepositCalculateService implements WalletCalculateManagerInterface
 
     public function getType(): string
     {
-        return config('app.wallet_action_deposit');
+        return config('app.wallet_actions.wallet_action_deposit');
     }
 
     public function calculateCommissionFee(WalletOperation $walletOperation, Collection $userHistories): float

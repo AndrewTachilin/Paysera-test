@@ -24,7 +24,7 @@ class BusinessStrategy implements ClientTypeInterface
 
     public function getType(): string
     {
-        return config('app.wallet_action_type_business');
+        return config('app.wallet_types.wallet_action_type_business');
     }
 
     public function detectClientType(Collection $userHistories, WalletOperation $walletOperation): float

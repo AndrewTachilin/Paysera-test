@@ -16,7 +16,7 @@ class DepositStrategy implements ActionStrategyInterface
     public function __construct(WalletOperation $walletOperation)
     {
         $this->walletOperation = $walletOperation;
-        $this->walletAction = config('app.wallet_action_deposit');
+        $this->walletAction = config('app.wallet_actions.wallet_action_deposit');
     }
 
     public function getType(): string
