@@ -16,10 +16,9 @@ class AppProvider extends ServiceProvider
     public function boot()
     {
         $this->app->tag([BusinessStrategy::class], ['client-type']);
-        $this->app->tag([DepositStrategy::class], ['wallet-type-action']);
-        $this->app->tag([WalletDepositCalculateService::class], ['wallet-action']);
-        $this->app->tag([BusinessStrategy::class], ['client-type']);
         $this->app->tag([PrivateStrategy::class], ['client-type']);
+        $this->app->tag([DepositStrategy::class], ['wallet-type-action']);
         $this->app->tag([WithdrawStrategy::class], ['wallet-type-action']);
+        $this->app->tag([WalletDepositCalculateService::class], ['wallet-action']);
     }
 }
