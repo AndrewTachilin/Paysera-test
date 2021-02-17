@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\DataFixtures\Models;
 
-use App\Contracts\Services\Wallet\WalletWithdrawCalculateManagerInterface as WalletWithdrawAction;
-use App\Contracts\Strategies\EuroExchangeInterface;
 use App\Strategies\WithdrawRules\PrivateStrategy;
 
 class WalletOperationArrayFixture
@@ -16,9 +14,9 @@ class WalletOperationArrayFixture
             '2020-10-20',
             1,
             PrivateStrategy::CLIENT_TYPE,
-            WalletWithdrawAction::ACTION,
+            config('app.wallet_action_withdraw'),
             '10000',
-            EuroExchangeInterface::EURO,
+            config('app.default_currency'),
 
         ];
     }

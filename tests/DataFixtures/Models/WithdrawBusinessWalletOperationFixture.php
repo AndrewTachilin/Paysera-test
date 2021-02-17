@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\DataFixtures\Models;
 
-use App\Contracts\Strategies\BusinessStrategyInterface;
-use App\Contracts\Strategies\EuroExchangeInterface;
 use App\Models\Actions\WalletOperation;
-use App\Contracts\Services\Wallet\WalletDepositCalculateManagerInterface as WalletDepositAction;
 
 class WithdrawBusinessWalletOperationFixture
 {
@@ -16,9 +13,9 @@ class WithdrawBusinessWalletOperationFixture
         return (new WalletOperation())
             ->setUserId(1)
             ->setDateOfAction('2020-10-20')
-            ->setCurrency(EuroExchangeInterface::EURO)
-            ->setClientType(BusinessStrategyInterface::CLIENT_TYPE)
-            ->setActionType(WalletDepositAction::ACTION)
+            ->setCurrency(config('app.default_currency'))
+            ->setClientType(config('app.wallet_action_type_business'))
+            ->setActionType(config('app.wallet_action_deposit'))
             ->setActionAmount(30000);
     }
 }

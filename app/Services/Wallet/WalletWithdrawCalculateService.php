@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Wallet;
 
-use App\Contracts\Services\Wallet\WalletWithdrawCalculateManagerInterface;
+use App\Contracts\Services\Wallet\WalletCalculateManagerInterface;
 use App\Contracts\Services\WithdrawRules\ClientTypeInterface;
 use App\Exceptions\ValidationException\ClientTypeException;
 use App\Models\Actions\WalletOperation;
@@ -14,7 +14,7 @@ use Illuminate\Support\Collection;
  * Class WalletDepositCalculateService
  * @package App\Servicess\Wallet
  */
-class WalletWithdrawCalculateService implements WalletWithdrawCalculateManagerInterface
+class WalletWithdrawCalculateService implements WalletCalculateManagerInterface
 {
     /** @var ClientTypeInterface[] */
     private $clientTypes;
@@ -29,7 +29,7 @@ class WalletWithdrawCalculateService implements WalletWithdrawCalculateManagerIn
 
     public function getType(): string
     {
-        return self::ACTION;
+        return config('app.wallet_action_withdraw');
     }
 
     public function calculateCommissionFee(WalletOperation $walletOperation, Collection $userHistories): float

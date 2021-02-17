@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Strategies\WalletAction;
 
-use App\Contracts\Strategies\DepositStrategyInterface;
 use App\Exceptions\Wallet\WalletActionException;
 use App\Strategies\WalletAction\DepositStrategy;
 use Tests\DataFixtures\Models\DepositPrivateWalletOperationFixture;
@@ -21,7 +20,7 @@ class DepositStrategyTest extends TestCase
         $this->depositStrategy = new DepositStrategy($model);
         $result = $this->depositStrategy->detectTypeOfAction();
 
-        $this->assertEquals(DepositStrategyInterface::TYPE, $result);
+        $this->assertEquals(config('app.wallet_action_deposit'), $result);
     }
 
     public function testDetectTypeOfActionReturnException(): void

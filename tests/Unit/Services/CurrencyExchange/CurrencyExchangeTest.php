@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services\CurrencyExchange;
 
-use App\Contracts\Strategies\EuroExchangeInterface;
-use App\Contracts\Strategies\JpyExchangeInterface;
-use App\Contracts\Strategies\UsdExchangeInterface;
 use App\Services\CurrencyExchange\CurrencyExchangeService;
 use App\Services\Wallet\MathOperations;
 use Tests\DataFixtures\Api\ApiExchangeRatesArrayFixture;
@@ -30,7 +27,7 @@ class CurrencyExchangeTest extends TestCase
     public function testCalculateCommissionForEuroReturnAmount(): void
     {
         $fromAmount = 1000;
-        $result = $this->currencyExchange->exchange(EuroExchangeInterface::EURO, $fromAmount, $this->currencyExchangeRate);
+        $result = $this->currencyExchange->exchange(config('app.default_currency'), $fromAmount, $this->currencyExchangeRate);
 
         $this->assertEquals($fromAmount, $result);
     }
@@ -38,7 +35,7 @@ class CurrencyExchangeTest extends TestCase
     public function testCalculateCommissionForUsdReturnAmount(): void
     {
         $fromAmount = 1000;
-        $result = $this->currencyExchange->exchange(UsdExchangeInterface::USD, $fromAmount, $this->currencyExchangeRate);
+        $result = $this->currencyExchange->exchange(config('app.usd_currency'), $fromAmount, $this->currencyExchangeRate);
 
         $this->assertEquals(1199, $result);
     }
@@ -46,7 +43,7 @@ class CurrencyExchangeTest extends TestCase
     public function testCalculateCommissionForJpyReturnAmount(): void
     {
         $fromAmount = 1000;
-        $result = $this->currencyExchange->exchange(JpyExchangeInterface::JPY, $fromAmount, $this->currencyExchangeRate);
+        $result = $this->currencyExchange->exchange(config('app.jpy_currency'), $fromAmount, $this->currencyExchangeRate);
 
         $this->assertEquals(126240, $result);
     }

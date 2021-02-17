@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\DataFixtures\Models;
 
-use App\Contracts\Strategies\JpyExchangeInterface;
 use App\Models\Actions\WalletOperation;
-use App\Contracts\Services\Wallet\WalletDepositCalculateManagerInterface as WalletDepositAction;
 use App\Strategies\WithdrawRules\PrivateStrategy;
 
 class DepositPrivateJpyWalletOperationFixture
@@ -16,9 +14,9 @@ class DepositPrivateJpyWalletOperationFixture
         return (new WalletOperation())
             ->setUserId(1)
             ->setDateOfAction('2020-10-20')
-            ->setCurrency(JpyExchangeInterface::JPY)
+            ->setCurrency(config('app.jpy_currency'))
             ->setClientType(PrivateStrategy::CLIENT_TYPE)
-            ->setActionType(WalletDepositAction::ACTION)
+            ->setActionType(config('app.wallet_action_deposit'))
             ->setActionAmount(30000);
     }
 }

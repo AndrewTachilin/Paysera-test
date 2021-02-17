@@ -10,22 +10,25 @@ use App\Models\Actions\WalletOperation;
 
 class WithdrawStrategy implements WithdrawStrategyInterface
 {
-    protected WalletOperation $walletOperation;
+    private WalletOperation $walletOperation;
+
+    private string $walletAction;
 
     public function __construct(WalletOperation $walletOperation)
     {
         $this->walletOperation = $walletOperation;
+        $this->walletAction = config('app.wallet_action_withdraw');
     }
 
     public function getType(): string
     {
-        return self::TYPE;
+        return $this->walletAction;
     }
 
     public function detectTypeOfAction(): string
     {
-        if (self::TYPE  === $this->walletOperation->getActionType()) {
-            return self::TYPE;
+        if ($this->walletAction === $this->walletOperation->getActionType()) {
+            return $this->walletAction;
         }
 
         throw new WalletActionException('This action was not found in the system');

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services\CurrencyExchange;
 
-use App\Contracts\Strategies\EuroExchangeInterface;
 use App\Services\Wallet\MathOperations;
 
 class CurrencyExchangeService
@@ -18,7 +17,8 @@ class CurrencyExchangeService
 
     public function exchange(string $currency, float $amount, array $currencyExchangeRates): float
     {
-        if ($currency !== EuroExchangeInterface::EURO) {
+        $defaultCurrency = config('app.default_currency');
+        if ($currency !== $defaultCurrency) {
             $amount = $this->mathOperations->convertCurrency($amount, $currencyExchangeRates[$currency]);
         }
 

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Services\Wallet;
 
-use App\Contracts\Services\Wallet\WalletDepositCalculateManagerInterface;
+use App\Contracts\Services\Wallet\WalletCalculateManagerInterface;
 use App\Models\Actions\WalletOperation;
 use Illuminate\Support\Collection;
 
-class WalletDepositCalculateService implements WalletDepositCalculateManagerInterface
+class WalletDepositCalculateService implements WalletCalculateManagerInterface
 {
     private MathOperations $mathOperations;
 
@@ -19,7 +19,7 @@ class WalletDepositCalculateService implements WalletDepositCalculateManagerInte
 
     public function getType(): string
     {
-        return self::ACTION;
+        return config('app.wallet_action_deposit');
     }
 
     public function calculateCommissionFee(WalletOperation $walletOperation, Collection $userHistories): float

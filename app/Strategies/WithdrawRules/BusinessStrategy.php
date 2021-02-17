@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Strategies\WithdrawRules;
 
-use App\Contracts\Strategies\BusinessStrategyInterface;
+use App\Contracts\Services\WithdrawRules\ClientTypeInterface;
 use App\DataTransformer\WalletOperationDataTransformer;
 use App\Models\Actions\WalletOperation;
 use App\Services\Wallet\MathOperations;
 use Illuminate\Support\Collection;
 
-class BusinessStrategy implements BusinessStrategyInterface
+class BusinessStrategy implements ClientTypeInterface
 {
     private MathOperations $mathOperations;
 
@@ -24,7 +24,7 @@ class BusinessStrategy implements BusinessStrategyInterface
 
     public function getType(): string
     {
-        return self::CLIENT_TYPE;
+        return config('app.wallet_action_type_business');
     }
 
     public function detectClientType(Collection $userHistories, WalletOperation $walletOperation): float
