@@ -84,12 +84,7 @@ $app->configure('app');
 */
 
 $app->register(App\Providers\CsvServiceProvider::class);
-$app->register(App\Providers\BusinessWithdrawCalculateServiceProvider::class);
-$app->register(App\Providers\WithdrawPrivateCalculateServiceProvider::class);
-$app->register(App\Providers\WithdrawBusinessCalculateServiceProvider::class);
-$app->register(App\Providers\DepositStrategyProvider::class);
-$app->register(App\Providers\WithdrawStrategyProvider::class);
-$app->register(App\Providers\WalletDepositCalculateServiceProvider::class);
+$app->register(App\Providers\AppProvider::class);
 $app->register(App\Providers\WalletWithdrawCalculateServiceProvider::class);
 $app->register(STS\Fixer\FixerServiceProvider::class);
 $app->register(Irazasyed\Larasupport\Providers\ArtisanServiceProvider::class);
