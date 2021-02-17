@@ -7,6 +7,4 @@ namespace App\Contracts\Strategies;
 interface CurrencyExchangeStrategyInterface
 {
     public function exchange(string $currency, float $amount, array $currencyExchangeRate): float;
-
-    public function getType();
 }

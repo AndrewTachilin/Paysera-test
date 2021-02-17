@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Services\CurrencyExchange;
 
+use App\Contracts\Strategies\CurrencyExchangeStrategyInterface;
 use App\Services\Wallet\MathOperations;
 
-class CurrencyExchangeService
+class CurrencyExchangeService implements CurrencyExchangeStrategyInterface
 {
     private MathOperations $mathOperations;
 
