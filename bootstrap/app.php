@@ -83,7 +83,8 @@ $app->configure('app');
 |
 */
 
-$app->register(App\Providers\CsvServiceProvider::class);
+$app->register(App\Providers\DataServiceProvider::class);
+$app->register(App\Providers\ParseServiceProvider::class);
 $app->register(App\Providers\AppProvider::class);
 $app->register(App\Providers\WalletWithdrawCalculateServiceProvider::class);
 $app->register(STS\Fixer\FixerServiceProvider::class);

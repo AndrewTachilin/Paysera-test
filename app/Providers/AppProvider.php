@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Services\Wallet\WalletDepositCalculateService;
+use App\Strategies\File\CsvStrategy;
 use App\Strategies\WalletAction\DepositStrategy;
 use App\Strategies\WalletAction\WithdrawStrategy;
 use App\Strategies\WithdrawRules\BusinessStrategy;
@@ -20,5 +21,6 @@ class AppProvider extends ServiceProvider
         $this->app->tag([DepositStrategy::class], ['wallet-type-action']);
         $this->app->tag([WithdrawStrategy::class], ['wallet-type-action']);
         $this->app->tag([WalletDepositCalculateService::class], ['wallet-action']);
+        $this->app->tag([CsvStrategy::class], ['file-parsers']);
     }
 }

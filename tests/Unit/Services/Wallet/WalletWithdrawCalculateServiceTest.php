@@ -14,6 +14,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Utils;
 use PHPUnit\Framework\MockObject\MockObject;
+use Tests\DataFixtures\Api\ApiExchangeRatesArrayFixture;
 use Tests\DataFixtures\Api\ApiExchangeRatesFixture;
 use Tests\DataFixtures\Collections\WithdrawBusinessEurWalletOperationCollectionFixture;
 use Tests\DataFixtures\Collections\WithdrawPrivateEurWalletOperationCollectionFixture;
@@ -33,15 +34,18 @@ class WalletWithdrawCalculateServiceTest extends TestCase
     /** @var Client|MockObject */
     private $client;
 
+    private array $apiExchangeCurrency;
+
     public function setUp(): void
     {
         parent::setUp();
 
+        $this->apiExchangeCurrency = ApiExchangeRatesArrayFixture::get();
         $mathOperations = new MathOperations();
         $currencyExchange = new CurrencyExchangeService($mathOperations);
         $dataTransformer = new WalletOperationDataTransformer($mathOperations);
 
-        $privateStrategy = new PrivateStrategy($mathOperations, new Client(), $currencyExchange, $dataTransformer);
+        $privateStrategy = new PrivateStrategy($mathOperations, $currencyExchange, $dataTransformer);
         $businessStrategy = new BusinessStrategy($mathOperations, $dataTransformer);
 
         $this->client = $this->createMock(Client::class);
@@ -59,7 +63,8 @@ class WalletWithdrawCalculateServiceTest extends TestCase
 
         $result = $this->walletWithdrawCalculateService->calculateCommissionFee(
             $walletOperation,
-            $walletOperationCollection
+            $walletOperationCollection,
+            $this->apiExchangeCurrency
         );
 
         $this->assertEquals(0.00, $result);
@@ -72,7 +77,8 @@ class WalletWithdrawCalculateServiceTest extends TestCase
 
         $result = $this->walletWithdrawCalculateService->calculateCommissionFee(
             $walletOperation,
-            $walletOperationCollection
+            $walletOperationCollection,
+            $this->apiExchangeCurrency
         );
 
         $this->assertEquals(150, $result);
@@ -85,7 +91,8 @@ class WalletWithdrawCalculateServiceTest extends TestCase
 
         $result = $this->walletWithdrawCalculateService->calculateCommissionFee(
             $walletOperation,
-            $walletOperationCollection
+            $walletOperationCollection,
+            $this->apiExchangeCurrency
         );
 
         $this->assertEquals(3000, $result);

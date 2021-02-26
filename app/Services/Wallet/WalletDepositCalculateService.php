@@ -28,7 +28,7 @@ class WalletDepositCalculateService implements WalletCalculateManagerInterface
         array $exchangeCurrency
     ): string {
         return $this->mathOperations->calculateCommission(
-            (string) $walletOperation->getActionAmount(),
+            $walletOperation->getActionAmount(),
             config('app.commission_deposit'),
             (int) config('app.scale')
         );

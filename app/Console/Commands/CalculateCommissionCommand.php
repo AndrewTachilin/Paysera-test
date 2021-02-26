@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use App\Services\ParseFiles\ParseService;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
-use App\Contracts\Services\ParseFiles\ParseFileInterface;
 
 class CalculateCommissionCommand extends Command
 {
@@ -31,14 +31,13 @@ class CalculateCommissionCommand extends Command
         ];
     }
     /**
-     * Execute the console command.
+     * Execute the cons`ole command.
      *
      * @return void
      */
-    public function handle(ParseFileInterface $parseFileService): void
+    public function handle(ParseService $parseFileService): void
     {
         try {
-            $parseFileService->isValid($this->argument('fileName'));
             $percents = $parseFileService->parseFile($this->argument('fileName'));
 
             foreach ($percents as $percent) {

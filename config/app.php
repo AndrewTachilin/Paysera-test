@@ -23,5 +23,8 @@ return [
         'default_currency' => env('APP_DEFAULT_CURRENCY', 'EUR'),
         'usd_currency' => env('APP_USD_CURRENCY', 'USD'),
         'jpy_currency' => env('APP_JPY_CURRENCY', 'JPY'),
+    ],
+    'file_extensions' => [
+        'csv' => env('APP_AVAILABLE_FILE_EXTENSION', 'csv')
     ]
 ];

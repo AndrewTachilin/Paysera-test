@@ -8,7 +8,7 @@ use App\DataTransformer\WalletOperationDataTransformer;
 use App\Services\CurrencyExchange\CurrencyExchangeService;
 use App\Services\Wallet\MathOperations;
 use App\Strategies\WithdrawRules\PrivateStrategy;
-use GuzzleHttp\Client;
+use Tests\DataFixtures\Api\ApiExchangeRatesArrayFixture;
 use Tests\DataFixtures\Collections\WithdrawPrivateEurWalletOperationCollectionFixture;
 use Tests\DataFixtures\Collections\WithdrawPrivateHighAmountActionCollection;
 use Tests\DataFixtures\Collections\WithdrawPrivateUserMadeFourActionCollection;
@@ -20,16 +20,17 @@ class PrivateStrategyTest extends TestCase
 {
     private PrivateStrategy $privateStrategy;
 
+    private array $apiExchangeCurrency;
+
     public function setUp(): void
     {
         parent::setUp();
 
+        $this->apiExchangeCurrency = ApiExchangeRatesArrayFixture::get();
         $mathOperations = new MathOperations();
-
         $currencyExchange = new CurrencyExchangeService($mathOperations);
         $this->privateStrategy = new PrivateStrategy(
             $mathOperations,
-            new Client(),
             $currencyExchange,
             new WalletOperationDataTransformer($mathOperations)
         );
@@ -40,7 +41,11 @@ class PrivateStrategyTest extends TestCase
         $walletModel = WithdrawPrivateEurWalletOperationFixture::get();
         $walletCollection = WithdrawPrivateEurWalletOperationCollectionFixture::get();
 
-        $result = $this->privateStrategy->detectClientType($walletCollection, $walletModel);
+        $result = $this->privateStrategy->calculateCommission(
+            $walletCollection,
+            $walletModel,
+            $this->apiExchangeCurrency
+        );
 
         $this->assertEquals(0.00, $result);
     }
@@ -50,7 +55,11 @@ class PrivateStrategyTest extends TestCase
         $walletModel = WithdrawPrivateEurWalletOperationFixture::get();
         $walletCollection = WithdrawPrivateUserMadeFourActionCollection::get();
 
-        $result = $this->privateStrategy->detectClientType($walletCollection, $walletModel);
+        $result = $this->privateStrategy->calculateCommission(
+            $walletCollection,
+            $walletModel,
+            $this->apiExchangeCurrency
+        );
 
         $this->assertEquals(90, $result);
     }
@@ -60,7 +69,11 @@ class PrivateStrategyTest extends TestCase
         $walletModel = WithdrawPrivateEurHighWalletOperationFixture::get();
         $walletCollection = WithdrawPrivateHighAmountActionCollection::get();
 
-        $result = $this->privateStrategy->detectClientType($walletCollection, $walletModel);
+        $result = $this->privateStrategy->calculateCommission(
+            $walletCollection,
+            $walletModel,
+            $this->apiExchangeCurrency
+        );
 
         $this->assertEquals(3000, $result);
     }

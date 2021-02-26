@@ -4,6 +4,10 @@ ADD https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/mas
 
 RUN docker-php-ext-install bcmath
 
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install zip unzip
+
 RUN chmod uga+x /usr/local/bin/install-php-extensions && sync
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer

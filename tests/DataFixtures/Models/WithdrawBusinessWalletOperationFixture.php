@@ -16,6 +16,6 @@ class WithdrawBusinessWalletOperationFixture
             ->setCurrency(config('app.currencies.default_currency'))
             ->setClientType(config('app.wallet_types.wallet_action_type_business'))
             ->setActionType(config('app.wallet_actions.wallet_action_deposit'))
-            ->setActionAmount(30000);
+            ->setActionAmount('30000');
     }
 }

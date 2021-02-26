@@ -26,7 +26,7 @@ class CurrencyExchangeTest extends TestCase
 
     public function testCalculateCommissionForEuroReturnAmount(): void
     {
-        $fromAmount = 1000;
+        $fromAmount = '1000';
         $result = $this->currencyExchange->exchange(
             config('app.currencies.default_currency'),
             $fromAmount,
@@ -38,7 +38,7 @@ class CurrencyExchangeTest extends TestCase
 
     public function testCalculateCommissionForUsdReturnAmount(): void
     {
-        $fromAmount = 1000;
+        $fromAmount = '1000';
         $result = $this->currencyExchange->exchange(config('app.currencies.usd_currency'), $fromAmount, $this->currencyExchangeRate);
 
         $this->assertEquals(1199, $result);
@@ -46,7 +46,7 @@ class CurrencyExchangeTest extends TestCase
 
     public function testCalculateCommissionForJpyReturnAmount(): void
     {
-        $fromAmount = 1000;
+        $fromAmount = '1000';
         $result = $this->currencyExchange->exchange(config('app.currencies.jpy_currency'), $fromAmount, $this->currencyExchangeRate);
 
         $this->assertEquals(126240, $result);

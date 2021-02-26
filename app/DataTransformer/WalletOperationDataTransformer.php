@@ -44,7 +44,7 @@ class WalletOperationDataTransformer implements WalletOperationDataTransformerIn
             ->setUserId($walletOperation->getUserId())
             ->setClientType($walletOperation->getClientType())
             ->setActionType($walletOperation->getActionType())
-            ->setActionAmount((string)($amount) ?? (string)($walletOperation->getActionAmount()))
+            ->setActionAmount($amount ?? $walletOperation->getActionAmount())
             ->setCurrency($walletOperation->getCurrency());
     }
 }

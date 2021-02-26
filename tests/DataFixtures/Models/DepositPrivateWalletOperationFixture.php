@@ -16,6 +16,6 @@ class DepositPrivateWalletOperationFixture
             ->setCurrency(config('app.currencies.usd_currency'))
             ->setClientType(config('app.wallet_types.wallet_action_type_private'))
             ->setActionType(config('app.wallet_actions.wallet_action_deposit'))
-            ->setActionAmount(30000);
+            ->setActionAmount('30000');
     }
 }

@@ -17,37 +17,35 @@ class MathOperationsTest extends TestCase
 
         $this->mathOperations = new MathOperations();
     }
-    //As the application basically is a monolith with a few extension points, it is hardly extendable
 
+    public function testCalculateCommissionReturnCommission(): void
+    {
+        $fromAmount = '1000';
+        $percent = '10';
 
-//    public function testCalculateCommissionReturnCommission(): void
-//    {
-//        $fromAmount = '1000';
-//        $percent = '10';
-//
-//        $result = $this->mathOperations->calculateCommission($fromAmount, $percent);
-//
-//        $this->assertEquals(100, $result);
-//    }
-//
-//    public function testCalculateCommissionReturnCommissionWithFloat(): void
-//    {
-//        $fromAmount = '10';
-//        $percent = '0.1';
-//        $result = $this->mathOperations->calculateCommission($fromAmount, $percent);
-//
-//        $this->assertEquals('0.00', $result);
-//    }
-//
-//    public function testConvertCurrencyReturnInt(): void
-//    {
-//        $currency = 10.00;
-//        $rate = 5;
-//        $result = $this->mathOperations->convertCurrency($currency, $rate);
-//
-//        $this->assertEquals(50, $result);
-//    }
-//
+        $result = $this->mathOperations->calculateCommission($fromAmount, $percent, 4);
+
+        $this->assertEquals(100, $result);
+    }
+
+    public function testCalculateCommissionReturnCommissionWithFloat(): void
+    {
+        $fromAmount = '10';
+        $percent = '0.1';
+        $result = $this->mathOperations->calculateCommission($fromAmount, $percent, 4);
+
+        $this->assertEquals('0.0100', $result);
+    }
+
+    public function testConvertCurrencyReturnInt(): void
+    {
+        $currency = '10.00';
+        $rate = '5';
+        $result = $this->mathOperations->convertCurrency($currency, $rate);
+
+        $this->assertEquals(50, $result);
+    }
+
     public function testRoundToThousandthsWithBelowFiveValueReturnHigherValue(): void
     {
         $number = '10.123';

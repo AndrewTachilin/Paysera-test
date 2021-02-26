@@ -16,6 +16,6 @@ class WithdrawPrivateEurHighWalletOperationFixture
             ->setCurrency(config('app.currencies.default_currency'))
             ->setClientType(config('app.wallet_types.wallet_action_type_private'))
             ->setActionType(config('app.wallet_actions.wallet_action_withdraw'))
-            ->setActionAmount(1000000);
+            ->setActionAmount('1000000');
     }
 }
