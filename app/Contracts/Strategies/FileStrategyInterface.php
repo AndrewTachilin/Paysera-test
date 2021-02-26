@@ -8,10 +8,5 @@ interface FileStrategyInterface
 {
     public function getType(): string;
 
-    /**
-     * @param string $fileName
-     *
-     * @return mixed
-     */
-    public function parseFile(string $fileName);
+    public function parseFile(string $fileName): array;
 }

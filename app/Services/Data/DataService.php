@@ -33,22 +33,15 @@ class DataService implements DataServiceInterface
 
     private WalletOperationDataTransformer $dataTransformer;
 
-    private CurrencyExchangeApiRequest $exchangeApiRequest;
-
-    private CalculateCommissionService $calculateService;
 
     private CalculationDataTransformer $calculationDataTransformer;
 
     public function __construct(
-        CalculateCommissionService $calculateService,
-        CurrencyExchangeApiRequest $exchangeApiRequest,
         WalletOperationDataTransformer $dataTransformer,
         CalculationDataTransformer $calculationDataTransformer,
         iterable $actionWallets,
         iterable $actionTypes
     ) {
-        $this->calculateService = $calculateService;
-        $this->exchangeApiRequest = $exchangeApiRequest;
         $this->calculationDataTransformer = $calculationDataTransformer;
         $this->dataTransformer = $dataTransformer;
         $this->userHistoryCollection = collect();

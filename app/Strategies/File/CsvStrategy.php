@@ -23,24 +23,27 @@ class CsvStrategy implements FileStrategyInterface
 
     /**
      * @param string $fileName
-     * @return \Generator|mixed
+     * @return array
      *
      * @throws FileNotFoundException
      */
-    public function parseFile(string $fileName)
+    public function parseFile(string $fileName): array
     {
         $filePath = $this->getFilePath($fileName);
         $this->isPathValid($filePath);
 
         $file = fopen($filePath, 'rb+');
+        $rows = [];
         while (($walletOperation = fgetcsv($file)) !== false) {
             if (empty($walletOperation[0])) {
                 continue;
             }
-            yield $walletOperation;
-        }
 
+            $rows[] = $walletOperation;
+        }
         fclose($file);
+
+        return $rows;
     }
 
     private function getFilePath(string $fileName): string

@@ -6,5 +6,5 @@ namespace App\Contracts\Services\ParseFiles;
 
 interface ParseFileInterface
 {
-    public function parseFile(string $path): array;
+    public function parseFile(string $path);
 }

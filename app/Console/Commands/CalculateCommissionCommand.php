@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use App\Services\Data\CalculateService;
 use App\Services\ParseFiles\ParseService;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
@@ -35,10 +36,11 @@ class CalculateCommissionCommand extends Command
      *
      * @return void
      */
-    public function handle(ParseService $parseFileService): void
+    public function handle(ParseService $parseFileService, CalculateService $calculateService): void
     {
         try {
-            $percents = $parseFileService->parseFile($this->argument('fileName'));
+            $lines = $parseFileService->parseFile($this->argument('fileName'));
+            $percents = $calculateService->calculate($lines);
 
             foreach ($percents as $percent) {
                 $this->info($percent / config('app.total_percent'));

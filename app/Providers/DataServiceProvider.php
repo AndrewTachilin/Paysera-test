@@ -19,8 +19,6 @@ class DataServiceProvider extends ServiceProvider
     {
         $this->app->singleton(DataServiceInterface::class, function (Container $app) {
             return new DataService(
-                $app->get(CalculateCommissionService::class),
-                $app->get(CurrencyExchangeApiRequest::class),
                 $app->get(WalletOperationDataTransformer::class),
                 $app->get(CalculationDataTransformer::class),
                 $app->tagged('wallet-action'),

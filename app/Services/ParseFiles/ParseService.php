@@ -38,10 +38,8 @@ class ParseService implements ParseFileInterface
         iterable $availableExtensions
     ) {
         $this->exchangeApiRequest = $exchangeApiRequest;
-        $this->dataTransformer = $dataTransformer;
         $this->dataService = $dataService;
         $this->calculationService = $calculationService;
-        $this->userHistoryCollection = collect();
 
         /** @var FileStrategyInterface $fileParser */
         foreach ($availableExtensions as $availableExtension) {
@@ -49,15 +47,8 @@ class ParseService implements ParseFileInterface
         }
     }
 
-    /**
-     * @param string $fileName
-     * @return array
-     *
-     * @throws FileInvalidException
-     * @throws ParseFileException
-     * @throws \JsonException
-     */
-    public function parseFile(string $fileName): array
+
+    public function parseFile(string $fileName)
     {
         $extension = $this->isExtensionValid($fileName);
         $file = $this->fileParsers[$extension] ?? null;
@@ -65,20 +56,8 @@ class ParseService implements ParseFileInterface
         if (null === $file) {
             throw new InvalidFileException('invalid file');
         }
-        $lines = $file->parseFile($fileName);
-        $exchangeRates = $this->exchangeApiRequest->getRates();
-        $result = [];
 
-        try {
-            foreach ($lines as $walletOperation) {
-                $preparedData = $this->dataService->prepareDataForCalculation($walletOperation, $exchangeRates);
-                $result[] = $this->calculationService->calculateCommission($preparedData);
-            }
-        } catch (\Throwable $e) {
-            throw new ParseFileException($e->getMessage());
-        }
-
-        return $result;
+        return $file->parseFile($fileName);
     }
 
     private function isExtensionValid(string $fileName): string
