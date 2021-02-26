@@ -57,12 +57,12 @@ class CsvService implements ParseFileInterface
         }
     }
 
-
     public function isValid($fileName): void
     {
         $filePath = $this->getFilePath($fileName);
         $this->isFileValid($filePath, $fileName);
     }
+
     public function parseFile(string $fileName): array
     {
         $filePath = $this->getFilePath($fileName);

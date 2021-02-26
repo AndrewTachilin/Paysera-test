@@ -43,7 +43,6 @@ class BusinessStrategy implements ClientTypeInterface
         return $commissionFee;
     }
 
-
     private function storeUserHistory(
         WalletOperation $walletOperation,
         Collection $userHistoryCollection,

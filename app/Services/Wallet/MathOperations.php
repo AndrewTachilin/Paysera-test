@@ -14,6 +14,7 @@ class MathOperations implements WalletOperationsInterface
 
         return $this->divide($amountInCoins, config('app.total_percent'), $scale);
     }
+
     public function calculateCommission(string $amount, string $percent, int $scale = 0): string
     {
         $percent = $this->divide($percent, config('app.total_percent'), $scale);
