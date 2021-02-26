@@ -16,11 +16,11 @@ class CurrencyExchangeService implements CurrencyExchangeStrategyInterface
         $this->mathOperations = $mathOperations;
     }
 
-    public function exchange(string $currency, float $amount, array $currencyExchangeRates): float
+    public function exchange(string $currency, string $amount, array $currencyExchangeRates): string
     {
         $defaultCurrency = config('app.currencies.default_currency');
         if ($currency !== $defaultCurrency) {
-            $amount = $this->mathOperations->convertCurrency($amount, $currencyExchangeRates[$currency]);
+            $amount = $this->mathOperations->convertCurrency($amount, (string) $currencyExchangeRates[$currency]);
         }
 
         return $amount;

@@ -27,19 +27,24 @@ class BusinessStrategy implements ClientTypeInterface
         return config('app.wallet_types.wallet_action_type_business');
     }
 
-    public function detectClientType(Collection $userHistories, WalletOperation $walletOperation): float
-    {
+    public function calculateCommission(
+        Collection $userHistories,
+        WalletOperation $walletOperation,
+        array $exchangeCurrency
+    ): string {
         $commissionFee = $this->mathOperations->calculateCommission(
-            (string) $walletOperation->getActionAmount(),
-            config('app.commission_business_withdraw')
+            $walletOperation->getActionAmount(),
+            config('app.commission_business_withdraw'),
+            (int) config('app.scale')
         );
 
-        $this->addUserHistory($walletOperation, $userHistories);
+        $this->storeUserHistory($walletOperation, $userHistories);
 
         return $commissionFee;
     }
 
-    private function addUserHistory(
+
+    private function storeUserHistory(
         WalletOperation $walletOperation,
         Collection $userHistoryCollection,
         $exchangedCurrency = null

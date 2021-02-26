@@ -10,9 +10,10 @@ use App\Models\Actions\WalletOperation;
 
 class DepositStrategy implements ActionStrategyInterface
 {
-    protected WalletOperation $walletOperation;
+    private WalletOperation $walletOperation;
 
     private string $walletAction;
+
     public function __construct(WalletOperation $walletOperation)
     {
         $this->walletOperation = $walletOperation;

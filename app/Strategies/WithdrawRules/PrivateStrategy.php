@@ -6,21 +6,14 @@ namespace App\Strategies\WithdrawRules;
 
 use App\Contracts\Services\WithdrawRules\ClientTypeInterface;
 use App\DataTransformer\WalletOperationDataTransformer;
-use App\Exceptions\Wallet\WalletActionException;
 use App\Models\Actions\WalletOperation;
 use App\Services\CurrencyExchange\CurrencyExchangeService;
 use App\Services\Wallet\MathOperations;
 use Carbon\Carbon;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Collection;
 
 class PrivateStrategy implements ClientTypeInterface
 {
-    private Client $client;
-
     private MathOperations $mathOperations;
 
     private CurrencyExchangeService $currencyExchange;
@@ -31,12 +24,10 @@ class PrivateStrategy implements ClientTypeInterface
 
     public function __construct(
         MathOperations $mathOperations,
-        Client $client,
         CurrencyExchangeService $currencyExchanges,
         WalletOperationDataTransformer $dataTransformer
     ) {
         $this->mathOperations = $mathOperations;
-        $this->client = $client;
         $this->currencyExchange = $currencyExchanges;
         $this->dataTransformer = $dataTransformer;
         $this->walletActionType = config('app.wallet_types.wallet_action_type_private');
@@ -47,13 +38,15 @@ class PrivateStrategy implements ClientTypeInterface
         return $this->walletActionType;
     }
 
-    public function detectClientType(Collection $userHistories, WalletOperation $walletOperation): float
-    {
-        $commissionFee = 0.00;
+    public function calculateCommission(
+        Collection $userHistories,
+        WalletOperation $walletOperation,
+        array $exchangeCurrency
+    ): string {
+        $commissionFee = '0';
         // search in collection by start and end date and user ids
         $result = $this->searchInCollectionByCriteria($userHistories, $walletOperation);
-
-        $exchangedCurrency = $this->exchangeCurrency($walletOperation);
+        $exchangedCurrency = $this->exchangeCurrency($walletOperation, $exchangeCurrency);
         $totalAmount = $this->getTotalAmountForUser($result, $exchangedCurrency);
         $countOfOperation = $result->count();
 
@@ -63,17 +56,18 @@ class PrivateStrategy implements ClientTypeInterface
          */
         if ($totalAmount > config('app.limit_free_withdraw') || $countOfOperation > config('app.count_free_operation')) {
             $commissionFee = $this->mathOperations->calculateCommission(
-                (string) $walletOperation->getActionAmount(),
-                config('app.commission_private')
+                $walletOperation->getActionAmount(),
+                config('app.commission_private'),
+                (int) config('app.scale')
             );
         } else {
             $commissionFee = $this->mathOperations->calculateCommission(
-                (string) $commissionFee,
-                config('app.commission_private')
+                $commissionFee,
+                config('app.commission_private'),
+                (int) config('app.scale')
             );
         }
-
-        $this->addUserHistory($walletOperation, $userHistories, $exchangedCurrency);
+        $this->storeUserHistory($walletOperation, $userHistories, $exchangedCurrency);
 
         return $commissionFee;
     }
@@ -89,19 +83,8 @@ class PrivateStrategy implements ClientTypeInterface
         )->where('userId', '=', $walletOperation->getUserId());
     }
 
-    /**
-     * @param WalletOperation $walletOperation
-     *
-     * @return float
-     *
-     * @throws WalletActionException
-     *
-     * @throws \JsonException
-     */
-    private function exchangeCurrency(WalletOperation $walletOperation): float
+    private function exchangeCurrency(WalletOperation $walletOperation, array $exchangeRates): string
     {
-        $exchangeRates = $this->getExchangeRates();
-
         return $this->currencyExchange->exchange(
             $walletOperation->getCurrency(),
             $walletOperation->getActionAmount(),
@@ -111,17 +94,17 @@ class PrivateStrategy implements ClientTypeInterface
 
     protected function getTotalAmountForUser(
         Collection $filteredWithdraws,
-        float $currentWithdraw,
-        int $totalAmount = 0
-    ): float {
+        string $currentWithdraw
+    ): string {
+        $totalAmount = '';
         $filteredWithdraws->each(function (WalletOperation $item) use (&$totalAmount) {
-            $totalAmount += $item->getActionAmount();
+            $totalAmount = $this->mathOperations->fold($totalAmount, $item->getActionAmount());
         });
 
-        return $totalAmount + $currentWithdraw;
+        return $this->mathOperations->fold($totalAmount, $currentWithdraw);
     }
 
-    protected function addUserHistory(
+    protected function storeUserHistory(
         WalletOperation $walletOperation,
         Collection $userHistoryCollection,
         $exchangedCurrency = null
@@ -129,18 +112,6 @@ class PrivateStrategy implements ClientTypeInterface
         $walletOperation = $this->dataTransformer->resetAmountWalletOperation($walletOperation, $exchangedCurrency);
 
         $userHistoryCollection->add($walletOperation);
-    }
-
-    private function getExchangeRates(): array
-    {
-        $request = new Request('GET', config('app.api_exchange_url'));
-        $response = $this->client->send($request);
-
-        try {
-            return (array) json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR)['rates'];
-        } catch (GuzzleException $exception) {
-            throw new RequestException($exception->getMessage(), $request, $response, $exception);
-        }
     }
 
     private function getStartDayOfWeek(WalletOperation $walletOperation): string

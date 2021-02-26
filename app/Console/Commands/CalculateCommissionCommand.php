@@ -38,6 +38,7 @@ class CalculateCommissionCommand extends Command
     public function handle(ParseFileInterface $parseFileService): void
     {
         try {
+            $parseFileService->isValid($this->argument('fileName'));
             $percents = $parseFileService->parseFile($this->argument('fileName'));
 
             foreach ($percents as $percent) {

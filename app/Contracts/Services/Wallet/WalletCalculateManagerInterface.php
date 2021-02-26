@@ -11,5 +11,9 @@ interface WalletCalculateManagerInterface
 {
     public function getType(): string;
 
-    public function calculateCommissionFee(WalletOperation $walletOperation, Collection $userHistories): float;
+    public function calculateCommissionFee(
+        WalletOperation $walletOperation,
+        Collection $userHistories,
+        array $exchangeCurrency
+    ): string;
 }

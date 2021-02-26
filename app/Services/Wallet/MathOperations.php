@@ -8,32 +8,44 @@ use App\Contracts\Services\Wallet\WalletOperationsInterface;
 
 class MathOperations implements WalletOperationsInterface
 {
-    public function roundToThousandths(string $amount): int
+    public function roundToThousandths(string $amount, int $scale = 0): string
     {
-        $amountInCoins = bcmul($amount, config('app.total_percent'));
-        $roundToInteger = ceil((int) $amountInCoins);
+        $amountInCoins = $this->multiply($amount, config('app.total_percent'), $scale);
 
-        return intval($roundToInteger / (int) config('app.total_percent'));
+        return $this->divide($amountInCoins, config('app.total_percent'), $scale);
+    }
+    public function calculateCommission(string $amount, string $percent, int $scale = 0): string
+    {
+        $percent = $this->divide($percent, config('app.total_percent'), $scale);
+        $percents = $this->multiply($amount, $percent, $scale);
+
+        return $this->roundToThousandths($percents, $scale);
     }
 
-    public function calculateCommission(string $amount, string $percent): int
+    public function convertCurrency(string $fromCurrency, string $rate, int $scale = 0): string
     {
-        $percent = bcdiv($percent, config('app.total_percent'), 4);
-        $percents = bcmul($amount, (string) $percent);
-
-        return $this->roundToThousandths($percents);
+        return $this->multiply($fromCurrency, $rate, $scale);
     }
 
-    public function convertCurrency(float $fromCurrency, float $rate): int
+    public function convertToCoins(string $amount, int $scale = 0): string
     {
-        return (int) bcmul((string) $fromCurrency, (string) $rate);
+        $amount = $this->roundToThousandths($amount, $scale);
+
+        return $this->multiply($amount, config('app.total_percent'), $scale);
     }
 
-    public function convertToKopecks(string $amount): int
+    public function multiply(string $leftOperand, string $rightOperand, int $scale = 0): string
     {
-        $amount = $this->roundToThousandths($amount);
-        $kopecks = bcmul((string) $amount, config('app.total_percent'));
+        return bcmul($leftOperand, $rightOperand, $scale);
+    }
 
-        return intval($kopecks);
+    public function divide(string $dividend, string $divisor, int $scale = 0): string
+    {
+        return bcdiv($dividend, $divisor, $scale);
+    }
+
+    public function fold(string $leftOperand, string $rightOperand, int $scale = 0): string
+    {
+        return bcadd($leftOperand, $rightOperand, $scale);
     }
 }

@@ -10,5 +10,5 @@ interface WalletOperationDataTransformerInterface
 {
     public function transformFromArray(array $walletAction): WalletOperation;
 
-    public function resetAmountWalletOperation(WalletOperation $walletOperation, float $amount = null): WalletOperation;
+    public function resetAmountWalletOperation(WalletOperation $walletOperation, ?string $amount = ''): WalletOperation;
 }

@@ -3,10 +3,10 @@
 
 #run commands:
 ###docker-compose up -d
-###docker exec -it homework bash
+###docker exec -it homework-app bash
 
 #Need to install application dependencies
-##Composer install
+##composer install
 
 # System should be run by follow command: 
 ### php artisan calculate:commission input.csv     

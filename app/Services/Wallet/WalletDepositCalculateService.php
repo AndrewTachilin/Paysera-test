@@ -22,11 +22,15 @@ class WalletDepositCalculateService implements WalletCalculateManagerInterface
         return config('app.wallet_actions.wallet_action_deposit');
     }
 
-    public function calculateCommissionFee(WalletOperation $walletOperation, Collection $userHistories): float
-    {
+    public function calculateCommissionFee(
+        WalletOperation $walletOperation,
+        Collection $userHistories,
+        array $exchangeCurrency
+    ): string {
         return $this->mathOperations->calculateCommission(
             (string) $walletOperation->getActionAmount(),
-            config('app.commission_deposit')
+            config('app.commission_deposit'),
+            (int) config('app.scale')
         );
     }
 }

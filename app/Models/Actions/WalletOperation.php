@@ -14,7 +14,7 @@ class WalletOperation
 
     private string $actionType;
 
-    private int $actionAmount;
+    private string $actionAmount;
 
     private string $currency;
 
@@ -67,12 +67,12 @@ class WalletOperation
         return $this;
     }
 
-    public function getActionAmount(): int
+    public function getActionAmount(): string
     {
         return $this->actionAmount;
     }
 
-    public function setActionAmount(int $actionAmount): self
+    public function setActionAmount(string $actionAmount): self
     {
         $this->actionAmount = $actionAmount;
 

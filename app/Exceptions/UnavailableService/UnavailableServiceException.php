@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace App\Exceptions\UnavailableService;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 
 class UnavailableServiceException extends Exception
 {
-    public function __construct(string $message = '', int $code = JsonResponse::HTTP_INTERNAL_SERVER_ERROR)
+    public function __construct(string $message = '')
     {
-        parent::__construct($message, $code);
+        parent::__construct($message);
     }
 }

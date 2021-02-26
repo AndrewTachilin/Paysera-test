@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Exceptions\ValidationException;
+namespace App\Exceptions\Currency;
 
 use Exception;
 
-class ValidationException extends Exception
+class InvalidCurrencyException extends Exception
 {
     public function __construct(string $message = '')
     {

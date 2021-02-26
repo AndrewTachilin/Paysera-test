@@ -32,13 +32,16 @@ class WalletWithdrawCalculateService implements WalletCalculateManagerInterface
         return config('app.wallet_actions.wallet_action_withdraw');
     }
 
-    public function calculateCommissionFee(WalletOperation $walletOperation, Collection $userHistories): float
-    {
+    public function calculateCommissionFee(
+        WalletOperation $walletOperation,
+        Collection $userHistories,
+        array $exchangeCurrency
+    ): string {
         $clientType = $this->clientTypes[$walletOperation->getClientType()] ?? null;
         if ($clientType === null) {
             throw new ClientTypeException('Invalid client type');
         }
 
-        return $clientType->detectClientType($userHistories, $walletOperation);
+        return $clientType->calculateCommission($userHistories, $walletOperation, $exchangeCurrency);
     }
 }

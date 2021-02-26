@@ -17,6 +17,8 @@ class MathOperationsTest extends TestCase
 
         $this->mathOperations = new MathOperations();
     }
+    //As the application basically is a monolith with a few extension points, it is hardly extendable
+
 
 //    public function testCalculateCommissionReturnCommission(): void
 //    {

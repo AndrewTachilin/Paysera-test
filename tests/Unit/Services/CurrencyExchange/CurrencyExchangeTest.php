@@ -27,7 +27,11 @@ class CurrencyExchangeTest extends TestCase
     public function testCalculateCommissionForEuroReturnAmount(): void
     {
         $fromAmount = 1000;
-        $result = $this->currencyExchange->exchange(config('app.currencies.default_currency'), $fromAmount, $this->currencyExchangeRate);
+        $result = $this->currencyExchange->exchange(
+            config('app.currencies.default_currency'),
+            $fromAmount,
+            $this->currencyExchangeRate
+        );
 
         $this->assertEquals($fromAmount, $result);
     }
