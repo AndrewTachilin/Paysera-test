@@ -31,9 +31,9 @@ class CsvStrategy implements FileStrategyInterface
     {
         $filePath = $this->getFilePath($fileName);
         $this->isPathValid($filePath);
-
         $file = fopen($filePath, 'rb+');
         $rows = [];
+
         while (($walletOperation = fgetcsv($file)) !== false) {
             if (empty($walletOperation[0])) {
                 continue;
@@ -50,7 +50,6 @@ class CsvStrategy implements FileStrategyInterface
     {
         return sprintf('%s/%s', storage_path('import'), $fileName);
     }
-
 
     private function isPathValid(string $filePath): string
     {

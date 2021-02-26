@@ -42,6 +42,5 @@ class CalculateService implements CalculateServiceInterface
         }
 
         return $result;
-
     }
 }

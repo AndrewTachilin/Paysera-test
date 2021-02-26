@@ -13,7 +13,6 @@ use App\Exceptions\Currency\InvalidCurrencyException;
 use App\Exceptions\Wallet\WalletActionException;
 use App\Models\Actions\Calculation;
 use App\Models\Actions\WalletOperation;
-use App\Requests\CurrencyExchange\CurrencyExchangeApiRequest;
 use Illuminate\Support\Collection;
 use App\Exceptions\DataTransformer\UnableToTransformDataException;
 
@@ -80,9 +79,9 @@ class DataService implements DataServiceInterface
 
     private function isValidCurrency(WalletOperation $walletOperation, array $exchangeRates): void
     {
-        $isCurrencyExist = key_exists($walletOperation->getCurrency(), $exchangeRates);
+        $isCurrencyExist = array_key_exists($walletOperation->getCurrency(), $exchangeRates);
 
-        if (!$isCurrencyExist && $walletOperation->getCurrency() != config('app.currencies.default_currency')) {
+        if (!$isCurrencyExist && $walletOperation->getCurrency() !== config('app.currencies.default_currency')) {
             throw new InvalidCurrencyException('Currency is invalid');
         }
     }

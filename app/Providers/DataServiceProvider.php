@@ -7,8 +7,6 @@ namespace App\Providers;
 use App\Contracts\Services\Data\DataServiceInterface;
 use App\DataTransformer\CalculationDataTransformer;
 use App\DataTransformer\WalletOperationDataTransformer;
-use App\Requests\CurrencyExchange\CurrencyExchangeApiRequest;
-use App\Services\Data\CalculateCommissionService;
 use App\Services\Data\DataService;
 use Illuminate\Container\Container;
 use Illuminate\Support\ServiceProvider;
